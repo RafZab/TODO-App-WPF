@@ -3,9 +3,14 @@
     <Color x:Key="PrimaryBackgroundColor">#1c1c1c</Color>
     <Color x:Key="SecondaryColor">#e9adb9</Color>
     <Color x:Key="AlternativeSecondaryColor">#84c7c3</Color>
+    <Color x:Key="SecondaryBackgroundColor">#212121</Color>
+
+    <Color x:Key="PrimaryBorderPropertyColor">#3c424d</Color>
 
     <SolidColorBrush x:Key="PrimaryColorBrush" Color="{StaticResource PrimaryColor}" />
     <SolidColorBrush x:Key="PrimaryBackgroundColorBrush" Color="{StaticResource PrimaryBackgroundColor}" />
     <SolidColorBrush x:Key="SecondaryColorBrush" Color="{StaticResource SecondaryColor}" />
     <SolidColorBrush x:Key="AlternativeSecondaryColorBrush" Color="{StaticResource AlternativeSecondaryColor}" />
+    <SolidColorBrush x:Key="SecondaryBackgroundColorBrush" Color="{StaticResource SecondaryBackgroundColor}" />
+    <SolidColorBrush x:Key="PrimaryBorderPropertyColorBrush" Color="{StaticResource PrimaryBorderPropertyColor}" />
 </ResourceDictionary>
