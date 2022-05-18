@@ -21,11 +21,11 @@
             <ColumnDefinition Width="270" />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="1" Background="#1c1c1c">
+        <Grid Grid.Column="1" Background="{StaticResource PrimaryBackgroundColorBrush}">
             <StackPanel
                 Height="100"
                 VerticalAlignment="Top"
-                Background="#1c1c1c"
+                Background="{StaticResource PrimaryBackgroundColorBrush}"
                 Orientation="Horizontal">
                 <StackPanel.Effect>
                     <DropShadowEffect BlurRadius="30" ShadowDepth="1" />
@@ -36,19 +36,19 @@
                     Margin="5"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Foreground="#788cde"
+                    Foreground="{StaticResource PrimaryColorBrush}"
                     Kind="WeatherSunny" />
                 <Border />
                 <StackPanel Margin="5" Orientation="Vertical">
                     <TextBlock
                         VerticalAlignment="Center"
                         FontSize="35"
-                        Foreground="#788cde"
+                        Foreground="{StaticResource PrimaryColorBrush}"
                         Text="Mój Dzień" />
                     <TextBlock
                         VerticalAlignment="Center"
                         FontSize="20"
-                        Foreground="#788cde"
+                        Foreground="{StaticResource PrimaryColorBrush}"
                         Text="Czwartek, 19 maja" />
                 </StackPanel>
             </StackPanel>
@@ -84,7 +84,7 @@
                     <materialDesign:PackIcon
                         Grid.Column="0"
                         Margin="0,2,0,0"
-                        Foreground="#788cde"
+                        Foreground="{StaticResource PrimaryColorBrush}"
                         Kind="WeatherSunny" />
                     <Label
                         Grid.Column="1"
@@ -107,7 +107,7 @@
                     <materialDesign:PackIcon
                         Grid.Column="0"
                         Margin="0,2,0,0"
-                        Foreground="#e9adb9"
+                        Foreground="{StaticResource SecondaryColorBrush}"
                         Kind="StarOutline" />
                     <Label
                         Grid.Column="1"
@@ -130,7 +130,7 @@
                     <materialDesign:PackIcon
                         Grid.Column="0"
                         Margin="0,2,0,0"
-                        Foreground="#84c7c3"
+                        Foreground="{StaticResource AlternativeSecondaryColorBrush}"
                         Kind="CalendarAccountOutline" />
                     <Label
                         Grid.Column="1"
