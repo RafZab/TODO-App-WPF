@@ -151,6 +151,8 @@
                 Foreground="White"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
             <Button
+                Click="onClick"
+                Name="btn1"
                 Margin="5"
                 HorizontalContentAlignment="Left"
                 Style="{StaticResource MaterialDesignFlatButton}">
@@ -176,7 +178,7 @@
             <Button
                 Margin="5"
                 HorizontalContentAlignment="Left"
-                Style="{StaticResource MaterialDesignFlatButton}">
+                Style="{StaticResource MaterialDesignFlatButton}" Cursor="Hand">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50" />

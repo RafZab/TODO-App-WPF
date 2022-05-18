@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using TodoApp.Models;
 
 namespace TodoApp
@@ -18,6 +19,11 @@ namespace TodoApp
         }
 
         public ObservableCollection<ToDoTask> Tasks { get; set; } = new ObservableCollection<ToDoTask>();
+
+        void onClick(object sender, RoutedEventArgs e)
+        {
+            btn1.Background = Brushes.LightBlue;
+        }
 
 
 
