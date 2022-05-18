@@ -211,6 +211,31 @@
                 </Grid>
             </Button>
         </StackPanel>
+        <Separator Background="#878787"/>
+        <Border VerticalAlignment="Bottom" Background="#212121">
+            <Grid Margin="10,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="70" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                        Grid.Column="0"
+                        MaxHeight="80"
+                        Margin="5"
+                        AcceptsReturn="True"
+                        Foreground="White"
+                        TextWrapping="Wrap"
+                        VerticalScrollBarVisibility="Auto"
+                        Text="Nowa Lista"
+                    />
+                <Button
+                        Grid.Column="2"
+                        VerticalAlignment="Bottom"
+                        Style="{StaticResource MaterialDesignFlatButton}">
+                    <materialDesign:PackIcon Kind="Add" />
+                </Button>
+            </Grid>
+        </Border>
         <StackPanel Grid.Column="2" Background="#212121">
             <Button
                 Margin="10"
