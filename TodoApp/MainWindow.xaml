@@ -47,6 +47,7 @@
                         <DropShadowEffect BlurRadius="30" ShadowDepth="1" />
                     </StackPanel.Effect>
                     <materialDesign:PackIcon
+                        Name="kind"
                         Width="30"
                         Height="30"
                         Margin="5"
@@ -56,12 +57,12 @@
                         Kind="WeatherSunny" />
                     <Border />
                     <StackPanel Margin="5" Orientation="Vertical">
-                        <TextBlock
+                        <TextBlock Name="headline"
                             VerticalAlignment="Center"
                             FontSize="35"
                             Foreground="{StaticResource PrimaryColorBrush}"
                             Text="Mój Dzień" />
-                        <TextBlock
+                        <TextBlock Name="text"
                             VerticalAlignment="Center"
                             FontSize="20"
                             Foreground="{StaticResource PrimaryColorBrush}"
@@ -151,6 +152,7 @@
                 Foreground="White"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
             <Button
+                Click="onClick_mojdzien"
                 Margin="5"
                 HorizontalContentAlignment="Left"
                 Style="{StaticResource MaterialDesignFlatButton}">
@@ -174,6 +176,8 @@
                 </Grid>
             </Button>
             <Button
+                Click="onClick_wazne"
+                Name="btn1"
                 Margin="5"
                 HorizontalContentAlignment="Left"
                 Style="{StaticResource MaterialDesignFlatButton}">
@@ -197,6 +201,7 @@
                 </Grid>
             </Button>
             <Button
+                Click="onClick_zaplanowane"
                 Margin="5"
                 HorizontalContentAlignment="Left"
                 Style="{StaticResource MaterialDesignFlatButton}">
@@ -220,6 +225,7 @@
                 </Grid>
             </Button>
             <Button
+                Click="onClick_do_mnie"
                 Margin="5"
                 HorizontalContentAlignment="Left"
                 Style="{StaticResource MaterialDesignFlatButton}">
@@ -243,6 +249,7 @@
                 </Grid>
             </Button>
             <Button
+                Click="onClick_zadania"
                 Margin="5"
                 HorizontalContentAlignment="Left"
                 Style="{StaticResource MaterialDesignFlatButton}">
@@ -266,6 +273,7 @@
                 </Grid>
             </Button>
             <Button
+                Click="onClick_wprowadzenie"
                 Margin="5"
                 HorizontalContentAlignment="Left"
                 Style="{StaticResource MaterialDesignFlatButton}">
@@ -288,8 +296,8 @@
                         Foreground="White" />
                 </Grid>
             </Button>
-            <Separator Background="#878787"/>
             <Button
+                Click="onClick_artykuly"
                 Margin="5"
                 HorizontalContentAlignment="Left"
                 Style="{StaticResource MaterialDesignFlatButton}">
@@ -313,6 +321,7 @@
                 </Grid>
             </Button>
         </StackPanel>
+        <Separator Background="#878787"/>
         <Border VerticalAlignment="Bottom" Background="#212121">
             <Grid Margin="10,10">
                 <Grid.ColumnDefinitions>
