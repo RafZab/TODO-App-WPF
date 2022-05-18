@@ -164,6 +164,52 @@
                         Foreground="White" />
                 </Grid>
             </Button>
+            <Button
+                Margin="5"
+                HorizontalContentAlignment="Left"
+                Style="{StaticResource MaterialDesignFlatButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon
+                        Grid.Column="0"
+                        Margin="0,2,0,0"
+                        Foreground="{StaticResource AlternativeSecondaryColorBrush}"
+                        Kind="PeopleAdd" />
+                    <Label
+                        Grid.Column="1"
+                        Margin="0,0,0,0"
+                        HorizontalContentAlignment="Center"
+                        Content="Przydzielone do mnie"
+                        FontSize="10"
+                        Foreground="White" />
+                </Grid>
+            </Button>
+            <Button
+                Margin="5"
+                HorizontalContentAlignment="Left"
+                Style="{StaticResource MaterialDesignFlatButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon
+                        Grid.Column="0"
+                        Margin="0,2,0,0"
+                        Foreground="{StaticResource SecondaryColorBrush}"
+                        Kind="House" />
+                    <Label
+                        Grid.Column="1"
+                        Margin="0,0,0,0"
+                        HorizontalContentAlignment="Center"
+                        Content="Zadania"
+                        FontSize="10"
+                        Foreground="White" />
+                </Grid>
+            </Button>
         </StackPanel>
         <StackPanel Grid.Column="2" Background="#212121">
             <Button
