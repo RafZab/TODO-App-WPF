@@ -219,8 +219,125 @@
                         Foreground="White" />
                 </Grid>
             </Button>
+            <Button
+                Margin="5"
+                HorizontalContentAlignment="Left"
+                Style="{StaticResource MaterialDesignFlatButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon
+                        Grid.Column="0"
+                        Margin="0,2,0,0"
+                        Foreground="{StaticResource AlternativeSecondaryColorBrush}"
+                        Kind="PeopleAdd" />
+                    <Label
+                        Grid.Column="1"
+                        Margin="0,0,0,0"
+                        HorizontalContentAlignment="Center"
+                        Content="Przydzielone do mnie"
+                        FontSize="10"
+                        Foreground="White" />
+                </Grid>
+            </Button>
+            <Button
+                Margin="5"
+                HorizontalContentAlignment="Left"
+                Style="{StaticResource MaterialDesignFlatButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon
+                        Grid.Column="0"
+                        Margin="0,2,0,0"
+                        Foreground="{StaticResource SecondaryColorBrush}"
+                        Kind="House" />
+                    <Label
+                        Grid.Column="1"
+                        Margin="0,0,0,0"
+                        HorizontalContentAlignment="Center"
+                        Content="Zadania"
+                        FontSize="10"
+                        Foreground="White" />
+                </Grid>
+            </Button>
+            <Button
+                Margin="5"
+                HorizontalContentAlignment="Left"
+                Style="{StaticResource MaterialDesignFlatButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon
+                        Grid.Column="0"
+                        Margin="0,2,0,0"
+                        Foreground="Yellow"
+                        Kind="Hand" />
+                    <Label
+                        Grid.Column="1"
+                        Margin="0,0,0,0"
+                        HorizontalContentAlignment="Center"
+                        Content="Wprowadzenie"
+                        FontSize="10"
+                        Foreground="White" />
+                </Grid>
+            </Button>
+            <Button
+                Margin="5"
+                HorizontalContentAlignment="Left"
+                Style="{StaticResource MaterialDesignFlatButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon
+                        Grid.Column="0"
+                        Margin="0,2,0,0"
+                        Foreground="Gray"
+                        Kind="Shop" />
+                    <Label
+                        Grid.Column="1"
+                        Margin="0,0,0,0"
+                        HorizontalContentAlignment="Center"
+                        Content="Artykuły Spożywcze"
+                        FontSize="10"
+                        Foreground="White" />
+                </Grid>
+            </Button>
         </StackPanel>
-        <StackPanel Grid.Column="2" Background="{StaticResource SecondaryBackgroundColorBrush}">
+        <Separator Background="#878787"/>
+        <Border VerticalAlignment="Bottom" Background="#212121">
+            <Grid Margin="10,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="70" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                        Grid.Column="0"
+                        MaxHeight="80"
+                        Margin="5"
+                        AcceptsReturn="True"
+                        Foreground="White"
+                        TextWrapping="Wrap"
+                        VerticalScrollBarVisibility="Auto"
+                        Text="Nowa Lista"
+                    />
+                <Button
+                        Grid.Column="2"
+                        VerticalAlignment="Bottom"
+                        Style="{StaticResource MaterialDesignFlatButton}">
+                    <materialDesign:PackIcon Kind="Add" />
+                </Button>
+            </Grid>
+        </Border>
+        <StackPanel Grid.Column="2" Background="#212121">
             <Button
                 x:Name="CloseButton"
                 Margin="10"
