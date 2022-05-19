@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="TodoApp.PropertyControl"
+    x:Class="TodoApp.Controls.PropertyControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -20,15 +20,15 @@
             </Grid.ColumnDefinitions>
             <materialDesign:PackIcon
                 Grid.Column="0"
-                Width="{Binding IconWidth}"
-                Height="{Binding IconHeight}"
-                Foreground="{Binding IconBrush, FallbackValue={Binding FallbackBrush}}"
+                VerticalAlignment="Center"
+                Foreground="{Binding IconBrush}"
                 Kind="{Binding IconKind}" />
             <TextBlock
                 Grid.Column="1"
+                Margin="10,0,0,0"
                 FontSize="{Binding TextFontSize}"
                 FontWeight="Bold"
-                Foreground="{Binding TextBrush, FallbackValue={Binding FallbackBrush}}"
+                Foreground="{Binding TextBrush}"
                 Text="{Binding Text}" />
         </Grid>
     </Border>

@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MaterialDesignThemes.Wpf;
 
-namespace TodoApp
+namespace TodoApp.Controls
 {
     /// <summary>
     /// Interaction logic for PropertyControl.xaml
@@ -31,7 +20,7 @@ namespace TodoApp
             DependencyProperty.Register("IconKind", typeof(PackIconKind), typeof(PropertyControl), new PropertyMetadata(null));
 
         public static readonly DependencyProperty IconBrushProperty =
-            DependencyProperty.Register("IconBrush", typeof(Brush), typeof(PropertyControl), new PropertyMetadata(null));
+            DependencyProperty.Register("IconBrush", typeof(Brush), typeof(PropertyControl), new UIPropertyMetadata(FallbackBrush));
 
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(PropertyControl), new PropertyMetadata(null));
@@ -40,7 +29,7 @@ namespace TodoApp
             DependencyProperty.Register("TextFontSize", typeof(double), typeof(PropertyControl), new PropertyMetadata(null));
 
         public static readonly DependencyProperty TextBrushProperty =
-            DependencyProperty.Register("TextBrush", typeof(Brush), typeof(PropertyControl), new PropertyMetadata(null));
+            DependencyProperty.Register("TextBrush", typeof(Brush), typeof(PropertyControl), new UIPropertyMetadata(FallbackBrush));
 
         public double IconHeight
         {
@@ -84,7 +73,7 @@ namespace TodoApp
             set => SetValue(TextBrushProperty, value);
         }
 
-        public SolidColorBrush FallbackBrush => new(Colors.Gray);
+        public static SolidColorBrush FallbackBrush => new(Colors.Gray);
 
         public PropertyControl()
         {
