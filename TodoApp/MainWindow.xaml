@@ -38,6 +38,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -54,15 +55,21 @@
                     Content="To Do List"
                     FontSize="30" />
             </StackPanel>
-            <TextBox
+            <Label
                 Grid.Row="1"
+                Content="Settings"
+                FontSize="15"
+                Foreground="Gray"
+                PreviewMouseLeftButtonUp="Settings_OnPreviewMouseLeftButtonUp" />
+            <TextBox
+                Grid.Row="2"
                 Margin="20,10"
                 materialDesign:HintAssist.Hint="SEARCH"
                 Foreground="White"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
             <ListView
                 x:Name="GroupListView"
-                Grid.Row="2"
+                Grid.Row="3"
                 DataContext="{Binding ElementName=Host}"
                 ItemsSource="{Binding Groups}">
                 <ListView.ItemTemplate>
@@ -87,9 +94,9 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Separator Grid.Row="3" Background="#878787" />
+            <Separator Grid.Row="4" Background="#878787" />
             <Border
-                Grid.Row="4"
+                Grid.Row="5"
                 VerticalAlignment="Bottom"
                 Background="#212121">
                 <Grid Margin="10,10">
@@ -159,30 +166,43 @@
                     ItemsSource="{Binding Tasks}">
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:ToDoTask}">
-                            <Border
-                                Margin="10"
-                                Padding="10,10"
-                                HorizontalAlignment="Stretch"
-                                Background="{StaticResource PrimaryBorderPropertyColorBrush}"
-                                CornerRadius="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <materialDesign:PackIcon
-                                        VerticalAlignment="Center"
-                                        Foreground="Gray"
-                                        Kind="{Binding IsDone, Converter={StaticResource BoolToPackIconKindConverter}}" />
-                                    <TextBlock
-                                        Grid.Column="1"
-                                        Margin="10,0,0,0"
-                                        FontSize="18"
-                                        FontWeight="Bold"
-                                        Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
-                                        Text="{Binding Name}" />
-                                </Grid>
-                            </Border>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Border
+                                    Margin="10"
+                                    Padding="10,10"
+                                    HorizontalAlignment="Stretch"
+                                    Background="{StaticResource PrimaryBorderPropertyColorBrush}"
+                                    CornerRadius="2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <materialDesign:PackIcon
+                                            VerticalAlignment="Center"
+                                            Foreground="Gray"
+                                            Kind="{Binding IsDone, Converter={StaticResource BoolToPackIconKindConverter}}" />
+                                        <materialDesign:PackIcon
+                                            Grid.Column="1"
+                                            Margin="5,0,5,0"
+                                            VerticalAlignment="Center"
+                                            Foreground="Red"
+                                            Kind="Flag" />
+                                        <TextBlock
+                                            Grid.Column="2"
+                                            Margin="10,0,0,0"
+                                            FontSize="18"
+                                            FontWeight="Bold"
+                                            Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
+                                            Text="{Binding Name}" />
+                                    </Grid>
+                                </Border>
+                            </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

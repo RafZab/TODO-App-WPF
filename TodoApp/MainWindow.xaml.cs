@@ -2,8 +2,10 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using TodoApp.Models;
+using TodoApp.Views;
 
 namespace TodoApp
 {
@@ -28,21 +30,17 @@ namespace TodoApp
         public ObservableCollection<ToDoTask> Tasks { get; set; } = new ObservableCollection<ToDoTask>();
         public ObservableCollection<TaskGroup> Groups { get; set; } = new ObservableCollection<TaskGroup>();
 
-        //void onClick_artykuly(object sender, RoutedEventArgs e)
-        //{
-        //    headline.Text = "Artykuły spożywcze";
-        //    headline.Foreground = Brushes.Gray;
-        //    text.Foreground = Brushes.Gray;
-        //    kind.Foreground = Brushes.Gray;
-        //    kind.Kind = PackIconKind.Shop;
-        //}
-
-
         private void CloseButton_OnClick(object sender, RoutedEventArgs e)
         {
             //hack
             PropertiesPanel.Width = 0;
             MainGrid.ColumnDefinitions[2].Width = new GridLength(0);
+        }
+
+        private void Settings_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var dialogWindow = new SettingsWindow();
+            dialogWindow.ShowDialog();
         }
     }
 }
