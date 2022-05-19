@@ -22,14 +22,97 @@
             x:Key="BoolToPackIconKindConverter"
             FalseIcon="RadioboxBlank"
             TrueIcon="RadioboxMarked" />
+        <converters:SelectedGroupToBrushConverter x:Key="SelectedGroupToBrushConverter" />
+        <converters:SelectedGroupToIconKindConverter x:Key="SelectedGroupToIconKindConverter" FallBackIconKind="Key" />
+        <converters:SelectedGroupToTextConverter x:Key="SelectedGroupToTextConverter" />
     </Window.Resources>
-    <Grid>
+    <Grid x:Name="MainGrid" Background="{StaticResource SecondaryBackgroundColorBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="270" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="270" />
         </Grid.ColumnDefinitions>
 
+        <Grid Grid.Column="0" Background="{StaticResource SecondaryBackgroundColorBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Image
+                    Width="100"
+                    Height="80"
+                    Margin="10"
+                    Source="Resources/Assets/logo.png" />
+                <Label
+                    Margin="0,25,0,0"
+                    HorizontalContentAlignment="Center"
+                    Content="To Do List"
+                    FontSize="30" />
+            </StackPanel>
+            <TextBox
+                Grid.Row="1"
+                Margin="20,10"
+                materialDesign:HintAssist.Hint="SEARCH"
+                Foreground="White"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <ListView
+                x:Name="GroupListView"
+                Grid.Row="2"
+                DataContext="{Binding ElementName=Host}"
+                ItemsSource="{Binding Groups}">
+                <ListView.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:TaskGroup}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon
+                                Width="30"
+                                Height="30"
+                                Foreground="{Binding IconBrush}"
+                                Kind="{Binding Icon}" />
+                            <Label
+                                Grid.Column="1"
+                                Margin="10,0,0,0"
+                                Content="{Binding Name}"
+                                FontSize="16"
+                                Foreground="White" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Separator Grid.Row="3" Background="#878787" />
+            <Border
+                Grid.Row="4"
+                VerticalAlignment="Bottom"
+                Background="#212121">
+                <Grid Margin="10,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="70" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        Grid.Column="0"
+                        MaxHeight="80"
+                        Margin="5"
+                        Foreground="White"
+                        Text="New group"
+                        TextWrapping="Wrap"
+                        VerticalScrollBarVisibility="Auto" />
+                    <Button
+                        Grid.Column="1"
+                        VerticalAlignment="Bottom"
+                        Style="{StaticResource MaterialDesignFlatButton}">
+                        <materialDesign:PackIcon Kind="Add" />
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
         <Grid Grid.Column="1" Background="{StaticResource PrimaryBackgroundColorBrush}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -47,29 +130,29 @@
                         <DropShadowEffect BlurRadius="30" ShadowDepth="1" />
                     </StackPanel.Effect>
                     <materialDesign:PackIcon
-                        Name="kind"
                         Width="30"
                         Height="30"
                         Margin="5"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        Foreground="{StaticResource PrimaryColorBrush}"
-                        Kind="WeatherSunny" />
+                        Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
+                        Kind="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToIconKindConverter}}" />
                     <Border />
                     <StackPanel Margin="5" Orientation="Vertical">
-                        <TextBlock Name="headline"
+                        <TextBlock
                             VerticalAlignment="Center"
                             FontSize="35"
-                            Foreground="{StaticResource PrimaryColorBrush}"
-                            Text="Mój Dzień" />
-                        <TextBlock Name="text"
+                            Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
+                            Text="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToTextConverter}}" />
+                        <TextBlock
                             VerticalAlignment="Center"
                             FontSize="20"
-                            Foreground="{StaticResource PrimaryColorBrush}"
+                            Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
                             Text="Czwartek, 19 maja" />
                     </StackPanel>
                 </StackPanel>
                 <ListView
+                    x:Name="TasksListView"
                     Grid.Row="1"
                     DataContext="{x:Reference Host}"
                     ItemsSource="{Binding Tasks}">
@@ -95,7 +178,7 @@
                                         Margin="10,0,0,0"
                                         FontSize="18"
                                         FontWeight="Bold"
-                                        Foreground="{StaticResource PrimaryColorBrush}"
+                                        Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
                                         Text="{Binding Name}" />
                                 </Grid>
                             </Border>
@@ -117,7 +200,6 @@
                             Grid.ColumnSpan="2"
                             MaxHeight="80"
                             Margin="5,5,5,5"
-                            AcceptsReturn="True"
                             Foreground="White"
                             TextWrapping="Wrap"
                             VerticalScrollBarVisibility="Auto" />
@@ -133,224 +215,16 @@
             </Grid>
         </Grid>
 
-        <StackPanel Grid.Column="0" Background="{StaticResource SecondaryBackgroundColorBrush}">
-            <StackPanel Orientation="Horizontal">
-                <Image
-                    Width="100"
-                    Height="80"
-                    Margin="10"
-                    Source="Resources/Assets/logo.png" />
-                <Label
-                    Margin="0,25,0,0"
-                    HorizontalContentAlignment="Center"
-                    Content="To Do List"
-                    FontSize="30" />
-            </StackPanel>
-            <TextBox
-                Margin="20,10"
-                materialDesign:HintAssist.Hint="SEARCH"
-                Foreground="White"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-            <Button
-                Click="onClick_mojdzien"
-                Margin="5"
-                HorizontalContentAlignment="Left"
-                Style="{StaticResource MaterialDesignFlatButton}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <materialDesign:PackIcon
-                        Grid.Column="0"
-                        Margin="0,2,0,0"
-                        Foreground="{StaticResource PrimaryColorBrush}"
-                        Kind="WeatherSunny" />
-                    <Label
-                        Grid.Column="1"
-                        Margin="0,0,0,0"
-                        HorizontalContentAlignment="Center"
-                        Content="Mój dzień"
-                        FontSize="10"
-                        Foreground="White" />
-                </Grid>
-            </Button>
-            <Button
-                Click="onClick_wazne"
-                Name="btn1"
-                Margin="5"
-                HorizontalContentAlignment="Left"
-                Style="{StaticResource MaterialDesignFlatButton}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <materialDesign:PackIcon
-                        Grid.Column="0"
-                        Margin="0,2,0,0"
-                        Foreground="{StaticResource SecondaryColorBrush}"
-                        Kind="StarOutline" />
-                    <Label
-                        Grid.Column="1"
-                        Margin="0,0,0,0"
-                        HorizontalContentAlignment="Center"
-                        Content="Ważne"
-                        FontSize="10"
-                        Foreground="White" />
-                </Grid>
-            </Button>
-            <Button
-                Click="onClick_zaplanowane"
-                Margin="5"
-                HorizontalContentAlignment="Left"
-                Style="{StaticResource MaterialDesignFlatButton}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <materialDesign:PackIcon
-                        Grid.Column="0"
-                        Margin="0,2,0,0"
-                        Foreground="{StaticResource AlternativeSecondaryColorBrush}"
-                        Kind="CalendarAccountOutline" />
-                    <Label
-                        Grid.Column="1"
-                        Margin="0,0,0,0"
-                        HorizontalContentAlignment="Left"
-                        Content="Zaplanowane"
-                        FontSize="10"
-                        Foreground="White" />
-                </Grid>
-            </Button>
-            <Button
-                Click="onClick_do_mnie"
-                Margin="5"
-                HorizontalContentAlignment="Left"
-                Style="{StaticResource MaterialDesignFlatButton}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <materialDesign:PackIcon
-                        Grid.Column="0"
-                        Margin="0,2,0,0"
-                        Foreground="{StaticResource AlternativeSecondaryColorBrush}"
-                        Kind="PeopleAdd" />
-                    <Label
-                        Grid.Column="1"
-                        Margin="0,0,0,0"
-                        HorizontalContentAlignment="Center"
-                        Content="Przydzielone do mnie"
-                        FontSize="10"
-                        Foreground="White" />
-                </Grid>
-            </Button>
-            <Button
-                Click="onClick_zadania"
-                Margin="5"
-                HorizontalContentAlignment="Left"
-                Style="{StaticResource MaterialDesignFlatButton}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <materialDesign:PackIcon
-                        Grid.Column="0"
-                        Margin="0,2,0,0"
-                        Foreground="{StaticResource SecondaryColorBrush}"
-                        Kind="House" />
-                    <Label
-                        Grid.Column="1"
-                        Margin="0,0,0,0"
-                        HorizontalContentAlignment="Center"
-                        Content="Zadania"
-                        FontSize="10"
-                        Foreground="White" />
-                </Grid>
-            </Button>
-            <Button
-                Click="onClick_wprowadzenie"
-                Margin="5"
-                HorizontalContentAlignment="Left"
-                Style="{StaticResource MaterialDesignFlatButton}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <materialDesign:PackIcon
-                        Grid.Column="0"
-                        Margin="0,2,0,0"
-                        Foreground="Yellow"
-                        Kind="Hand" />
-                    <Label
-                        Grid.Column="1"
-                        Margin="0,0,0,0"
-                        HorizontalContentAlignment="Center"
-                        Content="Wprowadzenie"
-                        FontSize="10"
-                        Foreground="White" />
-                </Grid>
-            </Button>
-            <Button
-                Click="onClick_artykuly"
-                Margin="5"
-                HorizontalContentAlignment="Left"
-                Style="{StaticResource MaterialDesignFlatButton}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <materialDesign:PackIcon
-                        Grid.Column="0"
-                        Margin="0,2,0,0"
-                        Foreground="Gray"
-                        Kind="Shop" />
-                    <Label
-                        Grid.Column="1"
-                        Margin="0,0,0,0"
-                        HorizontalContentAlignment="Center"
-                        Content="Artykuły Spożywcze"
-                        FontSize="10"
-                        Foreground="White" />
-                </Grid>
-            </Button>
-        </StackPanel>
-        <Separator Background="#878787"/>
-        <Border VerticalAlignment="Bottom" Background="#212121">
-            <Grid Margin="10,10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="70" />
-                </Grid.ColumnDefinitions>
-                <TextBox
-                        Grid.Column="0"
-                        MaxHeight="80"
-                        Margin="5"
-                        AcceptsReturn="True"
-                        Foreground="White"
-                        TextWrapping="Wrap"
-                        VerticalScrollBarVisibility="Auto"
-                        Text="Nowa Lista"
-                    />
-                <Button
-                        Grid.Column="2"
-                        VerticalAlignment="Bottom"
-                        Style="{StaticResource MaterialDesignFlatButton}">
-                    <materialDesign:PackIcon Kind="Add" />
-                </Button>
-            </Grid>
-        </Border>
-        <StackPanel Grid.Column="2" Background="#212121">
+
+        <StackPanel
+            x:Name="PropertiesPanel"
+            Grid.Column="2"
+            Background="#212121">
             <Button
                 x:Name="CloseButton"
                 Margin="10"
                 HorizontalAlignment="Right"
+                Click="CloseButton_OnClick"
                 Style="{StaticResource MaterialDesignFlatButton}">
                 <materialDesign:PackIcon Foreground="White" Kind="Close" />
             </Button>
@@ -373,6 +247,7 @@
                         Foreground="Gray"
                         Kind="RadioboxBlank" />
                     <TextBlock
+                        Grid.Row="0"
                         Grid.Column="1"
                         Margin="10,0,0,0"
                         FontSize="18"
@@ -381,58 +256,24 @@
                         Text="Task name" />
                     <materialDesign:PackIcon
                         Grid.Row="1"
+                        Grid.Column="0"
                         Margin="0,10,0,0"
                         VerticalAlignment="Center"
-                        Foreground="{StaticResource PrimaryColorBrush}"
+                        Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
                         Kind="Plus" />
                     <TextBlock
                         Grid.Row="1"
                         Grid.Column="1"
-                        Margin="10,0,0,0"
-                        FontSize="18"
+                        Margin="10,10,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="12"
                         FontWeight="Bold"
-                        Foreground="Gray"
-                        Text="Task name" />
+                        Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
+                        Text="Add sub-task" />
                 </Grid>
 
             </Border>
-            <TextBlock
-                HorizontalAlignment="Center"
-                FontSize="13"
-                Foreground="Gray"
-                Opacity="0.8"
-                Text="Game Designer" />
-            <TextBlock
-                HorizontalAlignment="Center"
-                FontSize="8"
-                Foreground="Gray"
-                Opacity="0.8"
-                Text="Shallow men believe in luck. Strong men believe in cause and effect." />
-            <StackPanel Grid.Row="4" Margin="20">
-                <Button HorizontalContentAlignment="Left">
-                    <StackPanel Margin="0,3" Orientation="Horizontal">
-                        <materialDesign:PackIcon Foreground="Gray" Kind="Location" />
-                        <TextBlock
-                            Margin="10,0"
-                            Foreground="Gray"
-                            Text="São Paulo, Brazil" />
-                    </StackPanel>
-                </Button>
-                <StackPanel Margin="0,3" Orientation="Horizontal">
-                    <materialDesign:PackIcon Foreground="Gray" Kind="Cellphone" />
-                    <TextBlock
-                        Margin="10,0"
-                        Foreground="Gray"
-                        Text="(11) 95555-5555" />
-                </StackPanel>
-                <StackPanel Margin="0,3" Orientation="Horizontal">
-                    <materialDesign:PackIcon Foreground="Gray" Kind="Email" />
-                    <TextBlock
-                        Margin="10,0"
-                        Foreground="Gray"
-                        Text="aforster@gmail.com" />
-                </StackPanel>
-            </StackPanel>
+
             <TextBlock
                 Margin="20,0"
                 Foreground="Gray"
