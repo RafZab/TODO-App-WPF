@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using MaterialDesignThemes.Wpf;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -26,6 +27,7 @@ namespace TodoApp
             headline.Foreground = Brushes.Red;
             text.Foreground = Brushes.Red;
             kind.Foreground = Brushes.Red;
+            kind.Kind = PackIconKind.StarOutline;
         }
 
         void onClick_zaplanowane(object sender, RoutedEventArgs e)
@@ -34,6 +36,7 @@ namespace TodoApp
             headline.Foreground = Brushes.Green;
             text.Foreground = Brushes.Green;
             kind.Foreground = Brushes.Green;
+            kind.Kind = PackIconKind.CalendarAccountOutline;
         }
 
         void onClick_do_mnie(object sender, RoutedEventArgs e)
@@ -42,6 +45,7 @@ namespace TodoApp
             headline.Foreground = Brushes.Green;
             text.Foreground = Brushes.Green;
             kind.Foreground = Brushes.Green;
+            kind.Kind = PackIconKind.PeopleAdd;
         }
 
         void onClick_mojdzien(object sender, RoutedEventArgs e)
@@ -50,6 +54,7 @@ namespace TodoApp
             headline.Foreground = Brushes.Purple;
             text.Foreground = Brushes.Purple;
             kind.Foreground = Brushes.Purple;
+            kind.Kind = PackIconKind.WeatherSunny;
         }
 
         void onClick_zadania(object sender, RoutedEventArgs e)
@@ -58,6 +63,7 @@ namespace TodoApp
             headline.Foreground = Brushes.Red;
             text.Foreground = Brushes.Red;
             kind.Foreground = Brushes.Red;
+            kind.Kind = PackIconKind.House;
         }
 
         void onClick_wprowadzenie(object sender, RoutedEventArgs e)
@@ -66,6 +72,7 @@ namespace TodoApp
             headline.Foreground = Brushes.Yellow;
             text.Foreground = Brushes.Yellow;
             kind.Foreground = Brushes.Yellow;
+            kind.Kind = PackIconKind.Hand;
 
         }
 
@@ -75,6 +82,7 @@ namespace TodoApp
             headline.Foreground = Brushes.Gray;
             text.Foreground = Brushes.Gray;
             kind.Foreground = Brushes.Gray;
+            kind.Kind = PackIconKind.Shop;
         }
 
 
