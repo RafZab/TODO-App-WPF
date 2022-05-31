@@ -5,7 +5,7 @@
     <Color x:Key="AlternativeSecondaryColor">#84c7c3</Color>
     <Color x:Key="SecondaryBackgroundColor">#212121</Color>
 
-    <Color x:Key="PrimaryBorderPropertyColor">#3c424d</Color>
+    <Color x:Key="PrimaryBorderPropertyColor">#2d2d2e</Color>
 
     <SolidColorBrush x:Key="PrimaryColorBrush" Color="{StaticResource PrimaryColor}" />
     <SolidColorBrush x:Key="PrimaryBackgroundColorBrush" Color="{StaticResource PrimaryBackgroundColor}" />

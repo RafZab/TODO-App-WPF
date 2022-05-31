@@ -2,8 +2,10 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using TodoApp.Models;
+using TodoApp.Views;
 
 namespace TodoApp
 {
@@ -17,74 +19,28 @@ namespace TodoApp
             InitializeComponent();
             Tasks.Add(new ToDoTask{ IsDone = false, Name = "Test task"});
             Tasks.Add(new ToDoTask { IsDone = true, Name = "Done task" });
+
+            Groups.Add(new TaskGroup("My Day", Colors.CornflowerBlue, PackIconKind.WeatherSunny));
+            Groups.Add(new TaskGroup("Important", Colors.IndianRed, PackIconKind.StarOutline));
+            Groups.Add(new TaskGroup("Planned", Colors.MediumAquamarine, PackIconKind.CalendarAccountOutline));
+            Groups.Add(new TaskGroup("Tasks", Colors.SlateBlue, PackIconKind.House));
+            Groups.Add(new TaskGroup("Shopping list", Colors.Gray, PackIconKind.ShoppingCart));
         }
 
         public ObservableCollection<ToDoTask> Tasks { get; set; } = new ObservableCollection<ToDoTask>();
+        public ObservableCollection<TaskGroup> Groups { get; set; } = new ObservableCollection<TaskGroup>();
 
-        void onClick_wazne(object sender, RoutedEventArgs e)
+        private void CloseButton_OnClick(object sender, RoutedEventArgs e)
         {
-            headline.Text = "Ważne";
-            headline.Foreground = Brushes.Red;
-            text.Foreground = Brushes.Red;
-            kind.Foreground = Brushes.Red;
-            kind.Kind = PackIconKind.StarOutline;
+            //hack
+            PropertiesPanel.Width = 0;
+            MainGrid.ColumnDefinitions[2].Width = new GridLength(0);
         }
 
-        void onClick_zaplanowane(object sender, RoutedEventArgs e)
+        private void Settings_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            headline.Text = "Zaplanowane";
-            headline.Foreground = Brushes.Green;
-            text.Foreground = Brushes.Green;
-            kind.Foreground = Brushes.Green;
-            kind.Kind = PackIconKind.CalendarAccountOutline;
+            var dialogWindow = new SettingsWindow();
+            dialogWindow.ShowDialog();
         }
-
-        void onClick_do_mnie(object sender, RoutedEventArgs e)
-        {
-            headline.Text = "Przydzielone do mnie";
-            headline.Foreground = Brushes.Green;
-            text.Foreground = Brushes.Green;
-            kind.Foreground = Brushes.Green;
-            kind.Kind = PackIconKind.PeopleAdd;
-        }
-
-        void onClick_mojdzien(object sender, RoutedEventArgs e)
-        {
-            headline.Text = "Mój dzień";
-            headline.Foreground = Brushes.Purple;
-            text.Foreground = Brushes.Purple;
-            kind.Foreground = Brushes.Purple;
-            kind.Kind = PackIconKind.WeatherSunny;
-        }
-
-        void onClick_zadania(object sender, RoutedEventArgs e)
-        {
-            headline.Text = "Zadania";
-            headline.Foreground = Brushes.Red;
-            text.Foreground = Brushes.Red;
-            kind.Foreground = Brushes.Red;
-            kind.Kind = PackIconKind.House;
-        }
-
-        void onClick_wprowadzenie(object sender, RoutedEventArgs e)
-        {
-            headline.Text = "Wprowadzenie";
-            headline.Foreground = Brushes.Yellow;
-            text.Foreground = Brushes.Yellow;
-            kind.Foreground = Brushes.Yellow;
-            kind.Kind = PackIconKind.Hand;
-
-        }
-
-        void onClick_artykuly(object sender, RoutedEventArgs e)
-        {
-            headline.Text = "Artykuły spożywcze";
-            headline.Foreground = Brushes.Gray;
-            text.Foreground = Brushes.Gray;
-            kind.Foreground = Brushes.Gray;
-            kind.Kind = PackIconKind.Shop;
-        }
-
-
     }
 }
