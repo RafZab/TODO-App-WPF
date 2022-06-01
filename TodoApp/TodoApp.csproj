@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Nowy folder\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
 

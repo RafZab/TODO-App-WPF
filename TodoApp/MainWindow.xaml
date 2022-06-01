@@ -330,6 +330,7 @@
                                 </ListView.ItemTemplate>
                             </ListView>
                             <materialDesign:PackIcon
+                                x:Name="calendar"
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Margin="0,10,0,0"
@@ -337,6 +338,7 @@
                                 Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
                                 Kind="Plus" />
                             <TextBlock
+                                x:Name="calendar"
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 Margin="10,10,0,0"
