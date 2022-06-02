@@ -18,7 +18,11 @@ namespace TodoApp
         {
             InitializeComponent();
             Tasks.Add(new ToDoTask{ IsDone = false, Name = "Test task"});
-            Tasks.Add(new ToDoTask { IsDone = true, Name = "Done task" });
+            Tasks.Add(new ToDoTask { IsDone = true, Name = "Done task", SubTasks = new ObservableCollection<ToDoSubTask>()
+            {
+                new ToDoSubTask{ IsDone = false, Name = "Not done sub task"},
+                new ToDoSubTask{ IsDone = true, Name = "Done sub task"}
+            }});
 
             Groups.Add(new TaskGroup("My Day", Colors.CornflowerBlue, PackIconKind.WeatherSunny));
             Groups.Add(new TaskGroup("Important", Colors.IndianRed, PackIconKind.StarOutline));
