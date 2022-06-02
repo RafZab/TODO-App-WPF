@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using TodoApp.Models;
+using TodoApp.ViewModels;
 using TodoApp.Views;
 
 namespace TodoApp
@@ -15,21 +16,19 @@ namespace TodoApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        public MainViewModel MainViewModel { get; set; }
         public MainWindow()
         {
             InitializeComponent();
+            MainViewModel = new MainViewModel();
+            DataContext = MainViewModel;
+
             Tasks.Add(new ToDoTask{ IsDone = false, Name = "Test task"});
             Tasks.Add(new ToDoTask { IsDone = true, Name = "Done task", SubTasks = new ObservableCollection<ToDoSubTask>()
             {
                 new ToDoSubTask{ IsDone = false, Name = "Not done sub task"},
                 new ToDoSubTask{ IsDone = true, Name = "Done sub task"}
             }});
-
-            Groups.Add(new TaskGroup("My Day", Colors.CornflowerBlue, PackIconKind.WeatherSunny));
-            Groups.Add(new TaskGroup("Important", Colors.IndianRed, PackIconKind.StarOutline));
-            Groups.Add(new TaskGroup("Planned", Colors.MediumAquamarine, PackIconKind.CalendarAccountOutline));
-            Groups.Add(new TaskGroup("Tasks", Colors.SlateBlue, PackIconKind.House));
-            Groups.Add(new TaskGroup("Shopping list", Colors.Gray, PackIconKind.ShoppingCart));
         }
 
         public ObservableCollection<ToDoTask> Tasks { get; set; } = new ObservableCollection<ToDoTask>();
@@ -46,11 +45,6 @@ namespace TodoApp
         {
             var dialogWindow = new SettingsWindow();
             dialogWindow.ShowDialog();
-        }
-
-        private void TasksListView_OnSelected(object sender, RoutedEventArgs e)
-        {
-            
         }
 
         private void TasksListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

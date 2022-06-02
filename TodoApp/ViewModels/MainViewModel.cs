@@ -12,6 +12,14 @@ namespace TodoApp.ViewModels
         {
             TaskGroups = new ExtendedObservableCollection<TaskGroup>();
             AddGroupCommand = new RelayCommand<string>(AddGroup);
+
+            TaskGroups.Add(new TaskGroup("My Day", Colors.CornflowerBlue, PackIconKind.WeatherSunny));
+            TaskGroups.Add(new TaskGroup("Important", Colors.IndianRed, PackIconKind.StarOutline));
+            TaskGroups.Add(new TaskGroup("Planned", Colors.MediumAquamarine, PackIconKind.CalendarAccountOutline));
+            TaskGroups.Add(new TaskGroup("Tasks", Colors.SlateBlue, PackIconKind.House));
+            TaskGroups.Add(new TaskGroup("Shopping list", Colors.Gray, PackIconKind.ShoppingCart));
+
+            _ = RaiseAllPropertiesChanged();
         }
 
         private void AddGroup(string groupName)
@@ -21,6 +29,6 @@ namespace TodoApp.ViewModels
 
         public ExtendedObservableCollection<TaskGroup> TaskGroups { get; }
 
-        public ICommand AddGroupCommand { get; }
+        public IRelayCommand<string> AddGroupCommand { get; }
     }
 }
