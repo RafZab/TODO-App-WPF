@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using TodoApp.Models;
@@ -45,6 +46,21 @@ namespace TodoApp
         {
             var dialogWindow = new SettingsWindow();
             dialogWindow.ShowDialog();
+        }
+
+        private void TasksListView_OnSelected(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void TasksListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TasksListView.SelectedItem is null)
+            {
+                return;
+            }
+            MainGrid.ColumnDefinitions[2].Width = GridLength.Auto;
+            PropertiesPanel.Width = 270;
         }
     }
 }

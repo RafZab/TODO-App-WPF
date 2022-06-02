@@ -12,11 +12,12 @@
 
   <ItemGroup>
     <Folder Include="Nowy folder\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Toolkit" Version="7.1.2" />
+    <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
   </ItemGroup>
 
   <ItemGroup>
