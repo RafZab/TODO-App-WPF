@@ -79,6 +79,8 @@ namespace TodoApp.ViewModels
 
             SelectedTask?.SubTasks.Add(new ToDoSubTask {Name = NewSubTaskName});
             NewSubTaskName = string.Empty; //clear form
+            _ = RaiseAllPropertiesChanged();
+            SelectedGroup.RaiseAllPropertiesChanged();
         }
 
         private void AddGroup(string groupName)
