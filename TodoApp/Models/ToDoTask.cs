@@ -1,34 +1,65 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using TodoApp.Commands;
+using TodoApp.ViewModels;
 
 namespace TodoApp.Models
 {
-    public class ToDoTask
+    public class ToDoTask : ExtendedNotifyPropertyChanged
     {
-        public string Name { get; set; }
+        private string _name;
+        private bool _isDone;
+        private DateTime _reminder;
+        private string _repeat;
+        private string _note;
 
-        public bool IsDone { get; set; }
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
 
-        public DataTime Reminder { get; set; }
+        public bool IsDone
+        {
+            get => _isDone;
+            set => SetProperty(ref _isDone, value);
+        }
 
+        public DateTime Reminder
+        {
+            get => _reminder;
+            set => SetProperty(ref _reminder, value);
+        }
 
-        public string Repeat { get; set; }
+        public string Repeat
+        {
+            get => _repeat;
+            set => SetProperty(ref _repeat, value);
+        }
 
-        public ObservableCollection<ToDoSubTask> SubTasks { get; set; }
+        public string Note
+        {
+            get => _note;
+            set => SetProperty(ref _note, value);
+        }
 
-
+        public ExtendedObservableCollection<ToDoSubTask> SubTasks { get; set; } =
+            new ExtendedObservableCollection<ToDoSubTask>();
     }
 
-    public class ToDoSubTask
+    public class ToDoSubTask : ExtendedNotifyPropertyChanged
     {
-        public string Name { get; set; }
+        private string _name;
+        private bool _isDone;
 
-        public bool IsDone { get; set; }
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
+
+        public bool IsDone
+        {
+            get => _isDone;
+            set => SetProperty(ref _isDone, value);
+        }
     }
 }

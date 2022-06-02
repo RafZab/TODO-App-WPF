@@ -1,10 +1,14 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using System;
+using MaterialDesignThemes.Wpf;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using TodoApp.Models;
+using TodoApp.ViewModels;
 using TodoApp.Views;
 
 namespace TodoApp
@@ -14,24 +18,15 @@ namespace TodoApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        public MainViewModel ViewModel { get;}
+
         public MainWindow()
         {
             InitializeComponent();
-            Tasks.Add(new ToDoTask{ IsDone = false, Name = "Test task"});
-            Tasks.Add(new ToDoTask { IsDone = true, Name = "Done task", SubTasks = new ObservableCollection<ToDoSubTask>()
-            {
-                new ToDoSubTask{ IsDone = false, Name = "Not done sub task"},
-                new ToDoSubTask{ IsDone = true, Name = "Done sub task"}
-            }});
-
-            Groups.Add(new TaskGroup("My Day", Colors.CornflowerBlue, PackIconKind.WeatherSunny));
-            Groups.Add(new TaskGroup("Important", Colors.IndianRed, PackIconKind.StarOutline));
-            Groups.Add(new TaskGroup("Planned", Colors.MediumAquamarine, PackIconKind.CalendarAccountOutline));
-            Groups.Add(new TaskGroup("Tasks", Colors.SlateBlue, PackIconKind.House));
-            Groups.Add(new TaskGroup("Shopping list", Colors.Gray, PackIconKind.ShoppingCart));
+            ViewModel = new MainViewModel();
+            DataContext = ViewModel;
         }
 
-        public ObservableCollection<ToDoTask> Tasks { get; set; } = new ObservableCollection<ToDoTask>();
         public ObservableCollection<TaskGroup> Groups { get; set; } = new ObservableCollection<TaskGroup>();
 
         private void CloseButton_OnClick(object sender, RoutedEventArgs e)
@@ -45,6 +40,38 @@ namespace TodoApp
         {
             var dialogWindow = new SettingsWindow();
             dialogWindow.ShowDialog();
+        }
+
+        private void AddSubTaskTextBox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                ViewModel.AddSubTask();
+            }
+        }
+
+        private bool GroupFilter(object item)
+        {
+            return item is TaskGroup taskGroup && taskGroup.Name.Contains(SearchTextBox.Text, StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        private bool TasksFilter(object item)
+        {
+            return item is ToDoTask toDoTask && toDoTask.Name.Contains(TasksSearchTextBox.Text, StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        private void SearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var view = CollectionViewSource.GetDefaultView(GroupListView.ItemsSource);
+            view.Filter = GroupFilter;
+            view.Refresh();
+        }
+
+        private void TasksSearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var view = CollectionViewSource.GetDefaultView(TasksListView.ItemsSource);
+            view.Filter = TasksFilter;
+            view.Refresh();
         }
     }
 }

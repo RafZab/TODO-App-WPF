@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TodoApp.Behaviors
 {
-    public class CloseButtonBehavior 
+    public class CloseButtonBehavior
     {
 
     }
