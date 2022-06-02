@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Toolkit.Mvvm.Input;
 using TodoApp.Models;
@@ -24,6 +25,8 @@ namespace TodoApp.ViewModels
 
             AddGroupCommand = new RelayCommand<string>(AddGroup);
             AddTaskCommand = new RelayCommand(AddTask);
+            ToggleTaskCommand = new RelayCommand<ToDoTask>(ToggleTask);
+            ToggleSubTaskCommand = new RelayCommand<ToDoSubTask>(ToggleSubTask);
 
             TaskGroups.Add(new TaskGroup("My Day", Colors.CornflowerBlue, PackIconKind.WeatherSunny));
             TaskGroups.Add(new TaskGroup("Important", Colors.IndianRed, PackIconKind.StarOutline));
@@ -35,6 +38,24 @@ namespace TodoApp.ViewModels
             TaskGroups[0].Tasks.Add(new ToDoTask {IsDone = false, Name = "Not done task"});
             TaskGroups[0].Tasks.Add(new ToDoTask { IsDone = false, Name = "Done task" });
             _ = RaiseAllPropertiesChanged();
+        }
+
+        private void ToggleSubTask(ToDoSubTask subTask)
+        {
+            if (subTask is null)
+            {
+                return;
+            }
+            subTask.IsDone = !subTask.IsDone;
+        }
+
+        private void ToggleTask(ToDoTask task)
+        {
+            if (task is null)
+            {
+                return;
+            }
+            task.IsDone = !task.IsDone;
         }
 
         public void AddTask()
@@ -103,6 +124,10 @@ namespace TodoApp.ViewModels
 
         public IRelayCommand<string> AddGroupCommand { get; }
 
-        public ICommand AddTaskCommand { get; }
+        public IRelayCommand AddTaskCommand { get; }
+
+        public IRelayCommand<ToDoTask> ToggleTaskCommand { get; }
+
+        public IRelayCommand<ToDoSubTask> ToggleSubTaskCommand { get; }
     }
 }

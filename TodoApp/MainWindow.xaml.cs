@@ -46,8 +46,8 @@ namespace TodoApp
             {
                 return;
             }
-            MainGrid.ColumnDefinitions[2].Width = GridLength.Auto;
-            PropertiesPanel.Width = 270;
+            //MainGrid.ColumnDefinitions[2].Width = GridLength.Auto;
+            //PropertiesPanel.Width = 270;
         }
 
         private void AddSubTaskTextBox_OnKeyDown(object sender, KeyEventArgs e)
