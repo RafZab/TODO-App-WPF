@@ -9,6 +9,7 @@ namespace TodoApp.Models
         private bool _isDone;
         private DateTime _reminder;
         private string _repeat;
+        private string _note;
 
         public string Name
         {
@@ -32,6 +33,12 @@ namespace TodoApp.Models
         {
             get => _repeat;
             set => SetProperty(ref _repeat, value);
+        }
+
+        public string Note
+        {
+            get => _note;
+            set => SetProperty(ref _note, value);
         }
 
         public ExtendedObservableCollection<ToDoSubTask> SubTasks { get; set; } =

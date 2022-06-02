@@ -84,11 +84,12 @@ namespace TodoApp.ViewModels
         {
             var taskCompletionSource = new TaskCompletionSource();
 
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
-            {
-                PropertyChanged?.Invoke(this, changedArgs);
-                taskCompletionSource.SetResult();
-            }));
+            //Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+            //{
+            //    PropertyChanged?.Invoke(this, changedArgs);
+            //    taskCompletionSource.SetResult();
+            //}));
+            PropertyChanged?.Invoke(this, changedArgs);
 
             return taskCompletionSource.Task;
         }

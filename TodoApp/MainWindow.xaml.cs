@@ -1,8 +1,10 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using System;
+using MaterialDesignThemes.Wpf;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using TodoApp.Models;
@@ -46,6 +48,30 @@ namespace TodoApp
             {
                 ViewModel.AddSubTask();
             }
+        }
+
+        private bool GroupFilter(object item)
+        {
+            return item is TaskGroup taskGroup && taskGroup.Name.Contains(SearchTextBox.Text, StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        private bool TasksFilter(object item)
+        {
+            return item is ToDoTask toDoTask && toDoTask.Name.Contains(TasksSearchTextBox.Text, StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        private void SearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var view = CollectionViewSource.GetDefaultView(GroupListView.ItemsSource);
+            view.Filter = GroupFilter;
+            view.Refresh();
+        }
+
+        private void TasksSearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var view = CollectionViewSource.GetDefaultView(TasksListView.ItemsSource);
+            view.Filter = TasksFilter;
+            view.Refresh();
         }
     }
 }
