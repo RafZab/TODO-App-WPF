@@ -40,16 +40,6 @@ namespace TodoApp
             dialogWindow.ShowDialog();
         }
 
-        private void TasksListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (TasksListView.SelectedItem is null)
-            {
-                return;
-            }
-            //MainGrid.ColumnDefinitions[2].Width = GridLength.Auto;
-            //PropertiesPanel.Width = 270;
-        }
-
         private void AddSubTaskTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)

@@ -176,8 +176,7 @@
                     x:Name="TasksListView"
                     Grid.Row="1"
                     ItemsSource="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToTasksConverter}}"
-                    SelectedItem="{Binding SelectedTask, Mode=OneWayToSource}"
-                    SelectionChanged="TasksListView_OnSelectionChanged">
+                    SelectedItem="{Binding SelectedTask, Mode=OneWayToSource}">
                     <b:Interaction.Behaviors>
                         <behaviors:TaskListPropertiesBehavior PropertyMenu="{Binding ElementName=PropertiesPanel}" TargetGrid="{Binding ElementName=MainGrid}" />
                     </b:Interaction.Behaviors>

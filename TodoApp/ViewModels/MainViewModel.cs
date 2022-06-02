@@ -47,6 +47,7 @@ namespace TodoApp.ViewModels
                 return;
             }
             subTask.IsDone = !subTask.IsDone;
+            subTask.RaisePropertyChanged("IsDone");
         }
 
         private void ToggleTask(ToDoTask task)
@@ -56,6 +57,7 @@ namespace TodoApp.ViewModels
                 return;
             }
             task.IsDone = !task.IsDone;
+            task.RaisePropertyChanged("IsDone");
         }
 
         public void AddTask()
@@ -66,7 +68,6 @@ namespace TodoApp.ViewModels
             }
             SelectedGroup?.Tasks.Add(new ToDoTask { Name = NewTaskName});
             NewTaskName = string.Empty; //clear form
-            _ = RaiseAllPropertiesChanged(); //todo change that
         }
 
         public void AddSubTask()
@@ -78,7 +79,6 @@ namespace TodoApp.ViewModels
 
             SelectedTask?.SubTasks.Add(new ToDoSubTask {Name = NewSubTaskName});
             NewSubTaskName = string.Empty; //clear form
-            _ = RaiseAllPropertiesChanged(); //todo change that
         }
 
         private void AddGroup(string groupName)
