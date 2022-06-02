@@ -61,6 +61,11 @@ namespace TodoApp.ViewModels
             return true;
         }
 
+        public virtual Task RaiseAllPropertiesChanged()
+        {
+            return RaisePropertyChanged(AllPropertiesChanged);
+        }
+
         [NotifyPropertyChangedInvocator]
         public Task RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
         {
@@ -77,12 +82,15 @@ namespace TodoApp.ViewModels
 
         public virtual Task RaisePropertyChanged(PropertyChangedEventArgs changedArgs)
         {
+            var taskCompletionSource = new TaskCompletionSource();
+
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
             {
                 PropertyChanged?.Invoke(this, changedArgs);
+                taskCompletionSource.SetResult();
             }));
-            return null;
-            //todo
+
+            return taskCompletionSource.Task;
         }
     }
 }
