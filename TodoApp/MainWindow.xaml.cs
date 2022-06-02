@@ -16,22 +16,15 @@ namespace TodoApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainViewModel MainViewModel { get; set; }
+        public MainViewModel ViewModel { get;}
+
         public MainWindow()
         {
             InitializeComponent();
-            MainViewModel = new MainViewModel();
-            DataContext = MainViewModel;
-
-            Tasks.Add(new ToDoTask{ IsDone = false, Name = "Test task"});
-            Tasks.Add(new ToDoTask { IsDone = true, Name = "Done task", SubTasks = new ObservableCollection<ToDoSubTask>()
-            {
-                new ToDoSubTask{ IsDone = false, Name = "Not done sub task"},
-                new ToDoSubTask{ IsDone = true, Name = "Done sub task"}
-            }});
+            ViewModel = new MainViewModel();
+            DataContext = ViewModel;
         }
 
-        public ObservableCollection<ToDoTask> Tasks { get; set; } = new ObservableCollection<ToDoTask>();
         public ObservableCollection<TaskGroup> Groups { get; set; } = new ObservableCollection<TaskGroup>();
 
         private void CloseButton_OnClick(object sender, RoutedEventArgs e)
@@ -55,6 +48,14 @@ namespace TodoApp
             }
             MainGrid.ColumnDefinitions[2].Width = GridLength.Auto;
             PropertiesPanel.Width = 270;
+        }
+
+        private void AddSubTaskTextBox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                ViewModel.AddSubTask();
+            }
         }
     }
 }

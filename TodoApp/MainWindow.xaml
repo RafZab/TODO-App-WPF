@@ -14,7 +14,7 @@
     Width="1080"
     Height="600"
     MinWidth="280"
-    DataContext="{Binding MainViewModel, ElementName=Host}"
+    DataContext="{Binding ViewModel, ElementName=Host}"
     Foreground="{StaticResource SecondaryBackgroundColorBrush}"
     Icon="Resources/Assets/logo.png"
     WindowStartupLocation="CenterScreen"
@@ -24,6 +24,7 @@
             x:Key="BoolToPackIconKindConverter"
             FalseIcon="RadioboxBlank"
             TrueIcon="RadioboxMarked" />
+        <converters:SelectedGroupToTasksConverter x:Key="SelectedGroupToTasksConverter" />
         <converters:SelectedItemToSubtaskVisiblityConverter x:Key="SelectedItemToSubtaskVisiblityConverter" />
         <converters:SelectedItemToSubtaskVisiblityConverter x:Key="InvertedSelectedItemToSubtaskVisiblityConverter" Inverted="True" />
         <converters:SelectedGroupToBrushConverter x:Key="SelectedGroupToBrushConverter" />
@@ -75,7 +76,8 @@
             <ListView
                 x:Name="GroupListView"
                 Grid.Row="3"
-                ItemsSource="{Binding TaskGroups}">
+                ItemsSource="{Binding TaskGroups}"
+                SelectedItem="{Binding SelectedGroup, Mode=OneWayToSource}">
                 <ListView.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:TaskGroup}">
                         <Grid>
@@ -163,14 +165,14 @@
                             VerticalAlignment="Center"
                             FontSize="20"
                             Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
-                            Text="Czwartek, 19 maja" />
+                            Text="{Binding CurrentDate, StringFormat='{}{0:MMMM dd}'}" />
                     </StackPanel>
                 </StackPanel>
                 <ListView
                     x:Name="TasksListView"
                     Grid.Row="1"
-                    DataContext="{x:Reference Host}"
-                    ItemsSource="{Binding Tasks}"
+                    ItemsSource="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToTasksConverter}}"
+                    SelectedItem="{Binding SelectedTask, Mode=OneWayToSource}"
                     SelectionChanged="TasksListView_OnSelectionChanged">
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:ToDoTask}">
@@ -225,17 +227,21 @@
                             <ColumnDefinition Width="70" />
                         </Grid.ColumnDefinitions>
                         <TextBox
+                            x:Name="TaskNameTextBox"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
                             MaxHeight="80"
                             Margin="5,5,5,5"
+                            materialDesign:HintAssist.Hint="New task name"
                             Foreground="White"
+                            Text="{Binding NewTaskName}"
                             TextWrapping="Wrap"
                             VerticalScrollBarVisibility="Auto" />
                         <Button
                             Grid.Column="2"
                             Margin="15,0,15,0"
                             VerticalAlignment="Center"
+                            Command="{Binding AddTaskCommand}"
                             Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
                             <materialDesign:PackIcon Kind="Add" />
                         </Button>
@@ -243,7 +249,6 @@
                 </Border>
             </Grid>
         </Grid>
-
 
         <Grid
             x:Name="PropertiesPanel"
@@ -295,8 +300,8 @@
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="2"
-                                ItemsSource="{Binding SelectedItem, ElementName=TasksListView, Converter={StaticResource SelectedItemToSubtaskListConverter}}"
-                                Visibility="{Binding SelectedItem, ElementName=TasksListView, Converter={StaticResource SelectedItemToSubtaskVisiblityConverter}}">
+                                ItemsSource="{Binding SelectedTask.SubTasks}"
+                                Visibility="{Binding SelectedTask, Converter={StaticResource SelectedItemToSubtaskVisiblityConverter}}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="models:ToDoSubTask">
                                         <Grid>
@@ -334,23 +339,24 @@
                                 </ListView.ItemTemplate>
                             </ListView>
                             <materialDesign:PackIcon
-                                x:Name="calendarIcon"
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Margin="0,10,0,0"
                                 VerticalAlignment="Center"
                                 Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
                                 Kind="Plus" />
-                            <TextBlock
-                                x:Name="calendar"
+                            <TextBox
+                                x:Name="AddSubTaskTextBox"
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 Margin="10,10,0,0"
                                 VerticalAlignment="Center"
+                                materialDesign:HintAssist.Hint="Add sub-task"
                                 FontSize="12"
                                 FontWeight="Bold"
                                 Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
-                                Text="Add sub-task" />
+                                KeyDown="AddSubTaskTextBox_OnKeyDown"
+                                Text="{Binding NewSubTaskName}" />
                         </Grid>
 
                     </Border>

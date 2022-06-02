@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Media;
 using MaterialDesignThemes.Wpf;
+using TodoApp.ViewModels;
 
 namespace TodoApp.Models
 {
@@ -9,7 +10,7 @@ namespace TodoApp.Models
         public string Name { get; set; }
         public Brush IconBrush { get; set; }
         public PackIconKind Icon { get; set; }
-        public ObservableCollection<ToDoTask> Tasks { get; set; }
+        public ExtendedObservableCollection<ToDoTask> Tasks { get; set; } = new ExtendedObservableCollection<ToDoTask>();
 
         public TaskGroup(string name, Brush iconBrush, PackIconKind icon)
         {
