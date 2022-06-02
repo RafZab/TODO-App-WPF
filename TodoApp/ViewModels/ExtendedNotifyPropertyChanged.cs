@@ -19,13 +19,13 @@ namespace TodoApp.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void SetProperty<T>(ref T storage, T value, Action<bool>? action, [CallerMemberName] string? propertyName = null)
+        protected void SetProperty<T>(ref T storage, T value, Action<bool>? action, [CallerMemberName] string? propertyName = null)
         {
             if (action == null)
             {
@@ -37,7 +37,7 @@ namespace TodoApp.ViewModels
 
 
         [NotifyPropertyChangedInvocator]
-        protected virtual bool SetProperty<T>(ref T storage, T value, Action? afterAction, [CallerMemberName] string? propertyName = null)
+        protected bool SetProperty<T>(ref T storage, T value, Action? afterAction, [CallerMemberName] string? propertyName = null)
         {
             if (SetProperty(ref storage, value, propertyName))
             {
@@ -49,7 +49,7 @@ namespace TodoApp.ViewModels
         }
 
         [NotifyPropertyChangedInvocator]
-        protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(storage, value))
             {
@@ -74,13 +74,13 @@ namespace TodoApp.ViewModels
         }
 
         [NotifyPropertyChangedInvocator]
-        public virtual Task RaisePropertyChanged([CallerMemberName] string? whichProperty = "")
+        public Task RaisePropertyChanged([CallerMemberName] string? whichProperty = "")
         {
             var changedArgs = new PropertyChangedEventArgs(whichProperty);
             return RaisePropertyChanged(changedArgs);
         }
 
-        public virtual Task RaisePropertyChanged(PropertyChangedEventArgs changedArgs)
+        public Task RaisePropertyChanged(PropertyChangedEventArgs changedArgs)
         {
             var taskCompletionSource = new TaskCompletionSource();
 
