@@ -248,6 +248,53 @@
                                         Grid.ColumnSpan="2"
                                         Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
                                         Text="{Binding SubTasks, Converter={StaticResource SubTasksToStatusHeaderConverter}}" />
+                                    <ScrollViewer
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        MaxHeight="100"
+                                        Margin="0,20,0,0"
+                                        VerticalScrollBarVisibility="Auto">
+                                        <ListView ItemsSource="{Binding SubTasks}">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate DataType="models:ToDoSubTask">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto" />
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="Auto" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Button
+                                                                Background="Transparent"
+                                                                Command="{Binding ViewModel.ToggleSubTaskCommand, ElementName=Host}"
+                                                                CommandParameter="{Binding}">
+                                                                <Button.Style>
+                                                                    <Style TargetType="Button" />
+                                                                </Button.Style>
+
+                                                                <materialDesign:PackIcon
+                                                                    VerticalAlignment="Center"
+                                                                    Foreground="Gray"
+                                                                    Kind="{Binding IsDone, Converter={StaticResource BoolToPackIconKindConverter}}" />
+                                                            </Button>
+                                                            <TextBox
+                                                                Grid.Column="2"
+                                                                Margin="10,0,0,0"
+                                                                FontSize="12"
+                                                                FontWeight="Bold"
+                                                                Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
+                                                                Text="{Binding Name}" />
+
+                                                        </Grid>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </ScrollViewer>
                                 </Grid>
                             </Border>
 
