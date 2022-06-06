@@ -248,19 +248,21 @@
                                         Grid.ColumnSpan="2"
                                         Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
                                         Text="{Binding SubTasks, Converter={StaticResource SubTasksToStatusHeaderConverter}}" />
-
-                                    <ListView
+                                    <ScrollViewer
                                         Grid.Row="2"
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2"
+                                        MaxHeight="100"
                                         Margin="0,20,0,0"
-                                        ItemsSource="{Binding SubTasks}">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate DataType="models:ToDoSubTask">
-                                                <TextBlock Text="{Binding Name}" />
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
+                                        VerticalScrollBarVisibility="Auto">
+                                        <ListView ItemsSource="{Binding SubTasks}">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate DataType="models:ToDoSubTask">
+                                                    <TextBlock Text="{Binding Name}" />
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </ScrollViewer>
                                 </Grid>
                             </Border>
 
