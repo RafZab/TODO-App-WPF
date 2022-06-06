@@ -203,6 +203,7 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
@@ -248,6 +249,17 @@
                                         Grid.ColumnSpan="2"
                                         Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
                                         Text="{Binding SubTasks, Converter={StaticResource SubTasksToStatusHeaderConverter}}" />
+                                    <ListView
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        ItemsSource="{Binding SubTasks}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate DataType="models:ToDoSubTask">
+                                                <TextBlock Text="{Binding Name}" />
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
                                 </Grid>
                             </Border>
 
@@ -355,6 +367,14 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="models:ToDoSubTask">
                                         <Grid>
+                                            <Grid.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem
+                                                        Command="{Binding ViewModel.DeleteSubtaskCommand, Source={x:Reference Host}}"
+                                                        CommandParameter="{Binding}"
+                                                        Header="Delete me" />
+                                                </ContextMenu>
+                                            </Grid.ContextMenu>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
