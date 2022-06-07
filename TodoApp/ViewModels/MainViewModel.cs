@@ -29,6 +29,7 @@ namespace TodoApp.ViewModels
             ToggleSubTaskCommand = new RelayCommand<ToDoSubTask>(ToggleSubTask);
 
             DeleteSubtaskCommand = new RelayCommand<ToDoSubTask>(DeleteSubtask);
+            DeleteTaskCommand = new RelayCommand<ToDoTask>(DeleteTask);
 
             TaskGroups.Add(new TaskGroup("My Day", Colors.CornflowerBlue, PackIconKind.WeatherSunny));
             TaskGroups.Add(new TaskGroup("Important", Colors.IndianRed, PackIconKind.StarOutline));
@@ -50,6 +51,16 @@ namespace TodoApp.ViewModels
             }
 
             SelectedTask?.SubTasks.Remove(obj);
+        }
+
+        private void DeleteTask(ToDoTask obj)
+        {
+            if (obj is null)
+            {
+                return;
+            }
+
+            SelectedTask?.Tasks.Remove(obj);
         }
 
         private void ToggleSubTask(ToDoSubTask subTask)
@@ -143,5 +154,7 @@ namespace TodoApp.ViewModels
         public IRelayCommand<ToDoSubTask> ToggleSubTaskCommand { get; }
 
         public IRelayCommand<ToDoSubTask> DeleteSubtaskCommand { get; }
+
+        public IRelayCommand<ToDoTask> DeleteTaskCommand { get; }
     }
 }
