@@ -16,6 +16,8 @@ namespace TodoApp.ViewModels
         private ToDoTask _selectedTask;
         private string _newTaskName;
         private string _newSubTaskName;
+        public DateTime _endTime;
+        public bool _isStar;
 
         public DateTime CurrentDate { get; set; } = DateTime.Today;
 
@@ -30,7 +32,7 @@ namespace TodoApp.ViewModels
 
             DeleteSubtaskCommand = new RelayCommand<ToDoSubTask>(DeleteSubtask);
             DeleteTaskCommand = new RelayCommand<ToDoTask>(DeleteTask);
-            DeleteGroupCommand = new RelayCommand<string>(DeleteGroup);
+            //DeleteGroupCommand = new RelayCommand<string>(DeleteGroup);
 
             TaskGroups.Add(new TaskGroup("My Day", Colors.CornflowerBlue, PackIconKind.WeatherSunny));
             TaskGroups.Add(new TaskGroup("Important", Colors.IndianRed, PackIconKind.StarOutline));
@@ -42,6 +44,32 @@ namespace TodoApp.ViewModels
             TaskGroups[0].Tasks.Add(new ToDoTask {IsDone = false, Name = "Not done task"});
             TaskGroups[0].Tasks.Add(new ToDoTask { IsDone = false, Name = "Done task" });
             _ = RaiseAllPropertiesChanged();
+        }
+
+        public DateTime EndTime
+        {
+            get
+            {
+                return _endTime;
+            }
+            set
+            {
+                _endTime = value;
+                OnPropertyChanged("EndTime");
+            }
+        }
+
+        public bool IsStar
+        {
+            get
+            {
+                return _isStar;
+            }
+            set
+            {
+                _isStar = value;
+                OnPropertyChanged("IsStar");
+            }
         }
 
         private void DeleteSubtask(ToDoSubTask obj)
@@ -71,8 +99,7 @@ namespace TodoApp.ViewModels
                 return;
             }
 
-            //SelectedGroup?.TaskGroup.Remove(groupName);
-            break;
+            /*SelectedGroup?.TaskGroup.Remove(groupName);*/
         }
 
         private void ToggleSubTask(ToDoSubTask subTask)
