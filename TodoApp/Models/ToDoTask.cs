@@ -46,6 +46,10 @@ namespace TodoApp.Models
 
         public ExtendedObservableCollection<ToDoTask> Tasks { get; set; } =
     new ExtendedObservableCollection<ToDoTask>();
+
+        public ExtendedObservableCollection<TaskGroup> Groups{ get; set; } =
+new ExtendedObservableCollection<TaskGroup>();
+
     }
 
     public class ToDoSubTask : ExtendedNotifyPropertyChanged
