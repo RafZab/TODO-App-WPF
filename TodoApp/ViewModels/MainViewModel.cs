@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using System.Linq;
+using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Toolkit.Mvvm.Input;
 using TodoApp.Models;
@@ -17,7 +16,9 @@ namespace TodoApp.ViewModels
         private string _newTaskName;
         private string _newSubTaskName;
 
-        public DateTime CurrentDate { get; set; } = DateTime.Today;
+        public DateTime CurrentDate { get; } = DateTime.Today;
+
+        public event EventHandler OnRefreshRequest;
 
         public MainViewModel()
         {
@@ -30,6 +31,7 @@ namespace TodoApp.ViewModels
             DeleteTaskCommand = new RelayCommand<ToDoTask>(DeleteTask);
             DeleteGroupCommand = new RelayCommand<TaskGroup>(DeleteGroup);
             DeleteSubTaskCommand = new RelayCommand<ToDoSubTask>(DeleteSubTask);
+            ToggleStarTaskCommand = new RelayCommand(ToggleStartCommand);
 
             TaskGroups.Add(new TaskGroup("My Day", Colors.CornflowerBlue, PackIconKind.WeatherSunny));
             TaskGroups.Add(new TaskGroup("Important", Colors.IndianRed, PackIconKind.StarOutline));
@@ -40,7 +42,20 @@ namespace TodoApp.ViewModels
 
             TaskGroups[0].Tasks.Add(new ToDoTask {IsDone = false, Name = "Not done task"});
             TaskGroups[0].Tasks.Add(new ToDoTask { IsDone = false, Name = "Done task" });
+
+            SelectedGroup = TaskGroups.First();
+            SelectedTask = null;
             _ = RaiseAllPropertiesChanged();
+        }
+
+        private void ToggleStartCommand()
+        {
+            if (SelectedTask is null)
+            {
+                return;
+            }
+            SelectedTask.Star = !SelectedTask.Star;
+            SelectedTask?.RaiseAllPropertiesChanged();
         }
 
         private void DeleteSubTask(ToDoSubTask subTask)
@@ -50,12 +65,25 @@ namespace TodoApp.ViewModels
                 return;
             }
 
+            var result = MessageBox.Show("Do you really want to delete this subtask?", "Delete SubTask", MessageBoxButton.YesNo);
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
             SelectedTask?.SubTasks.Remove(subTask);
+            OnOnRefreshRequest();
         }
 
         private void DeleteGroup(TaskGroup group)
         {
             if (group is null)
+            {
+                return;
+            }
+
+            var result = MessageBox.Show("Do you really want to delete this task group?", "Delete Group", MessageBoxButton.YesNo);
+            if (result != MessageBoxResult.Yes)
             {
                 return;
             }
@@ -67,6 +95,12 @@ namespace TodoApp.ViewModels
         private void DeleteTask(ToDoTask task)
         {
             if (task is null)
+            {
+                return;
+            }
+
+            var result =MessageBox.Show( "Do you really want to delete this task?", "Delete Task", MessageBoxButton.YesNo);
+            if (result != MessageBoxResult.Yes)
             {
                 return;
             }
@@ -92,8 +126,10 @@ namespace TodoApp.ViewModels
             {
                 return;
             }
+
             task.IsDone = !task.IsDone;
             SelectedTask?.RaiseAllPropertiesChanged();
+            OnOnRefreshRequest();
         }
 
         public void AddTask()
@@ -102,8 +138,10 @@ namespace TodoApp.ViewModels
             {
                 return;
             }
-            SelectedGroup?.Tasks.Add(new ToDoTask { Name = NewTaskName});
+
+            SelectedGroup?.Tasks.Add(new ToDoTask { Name = NewTaskName, Created = DateTime.Now});
             NewTaskName = string.Empty; //clear form
+            OnOnRefreshRequest();
         }
 
         public void AddSubTask()
@@ -116,6 +154,7 @@ namespace TodoApp.ViewModels
             SelectedTask?.SubTasks.Add(new ToDoSubTask {Name = NewSubTaskName});
             NewSubTaskName = string.Empty; //clear form
             SelectedTask?.RaiseAllPropertiesChanged();
+            SelectedGroup?.RaiseAllPropertiesChanged();
         }
 
         private void AddGroup(string groupName)
@@ -172,5 +211,12 @@ namespace TodoApp.ViewModels
         public IRelayCommand<TaskGroup> DeleteGroupCommand { get; }
 
         public IRelayCommand<ToDoSubTask> DeleteSubTaskCommand { get; }
+
+        public IRelayCommand ToggleStarTaskCommand { get; }
+
+        protected virtual void OnOnRefreshRequest()
+        {
+            OnRefreshRequest?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

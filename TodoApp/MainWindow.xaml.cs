@@ -1,6 +1,7 @@
 ﻿using System;
 using MaterialDesignThemes.Wpf;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,9 +23,25 @@ namespace TodoApp
 
         public MainWindow()
         {
-            InitializeComponent();
             ViewModel = new MainViewModel();
             DataContext = ViewModel;
+            ViewModel.OnRefreshRequest += OnOnRefreshRequest;
+
+            InitializeComponent();
+        }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+
+            var view = CollectionViewSource.GetDefaultView(TasksListView.ItemsSource);
+            view.SortDescriptions.Add(new SortDescription("IsDone", ListSortDirection.Ascending));
+        }
+
+        private void OnOnRefreshRequest(object sender, EventArgs e)
+        {
+            var view = CollectionViewSource.GetDefaultView(TasksListView.ItemsSource);
+            view.Refresh();
         }
 
         public ObservableCollection<TaskGroup> Groups { get; set; } = new ObservableCollection<TaskGroup>();

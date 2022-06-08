@@ -27,6 +27,11 @@
             x:Key="BoolToPackIconKindConverter"
             FalseIcon="RadioboxBlank"
             TrueIcon="RadioboxMarked" />
+        <converters:BoolToPackIconKindConverter
+            x:Key="StarBoolToPackIconKindConverter"
+            FalseIcon="StarOutline"
+            TrueIcon="Star" />
+        <converters:BoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter" Inverted="True" />
         <converters:SubTasksToStatusHeaderConverter x:Key="SubTasksToStatusHeaderConverter" />
         <converters:SelectedGroupToTasksConverter x:Key="SelectedGroupToTasksConverter" />
         <converters:SelectedItemToSubtaskVisiblityConverter x:Key="SelectedItemToSubtaskVisiblityConverter" />
@@ -36,12 +41,13 @@
         <converters:SelectedGroupToTextConverter x:Key="SelectedGroupToTextConverter" />
         <converters:SelectedItemToSubtaskListConverter x:Key="SelectedItemToSubtaskListConverter" />
         <converters:SelectedItemToNameConverter x:Key="SelectedItemToNameConverter" />
+        <converters:BoolToTextDecorationsConverter x:Key="BoolToTextDecorationsConverter" TrueDecorations="Strikethrough" />
     </Window.Resources>
     <Grid x:Name="MainGrid" Background="{StaticResource SecondaryBackgroundColorBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="270" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="270" />
+            <ColumnDefinition Width="0" />
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0" Background="{StaticResource SecondaryBackgroundColorBrush}">
@@ -215,7 +221,7 @@
                                             Header="Delete Task" />
                                     </ContextMenu>
                                 </Border.ContextMenu>
-                                <Grid>
+                                <Grid MinWidth="450">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
@@ -230,6 +236,7 @@
                                         Margin="0"
                                         Padding="0"
                                         Background="Transparent"
+                                        BorderBrush="Transparent"
                                         Command="{Binding ViewModel.ToggleTaskCommand, ElementName=Host}"
                                         CommandParameter="{Binding}">
                                         <Button.Style>
@@ -243,12 +250,13 @@
                                     </Button>
 
                                     <materialDesign:PackIcon
+                                        x:Name="Star"
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Margin="5,0,5,0"
                                         VerticalAlignment="Center"
-                                        Foreground="Red"
-                                        Kind="Flag" />
+                                        Foreground="{Binding ViewModel.SelectedGroup.IconBrush, Source={x:Reference Host}}"
+                                        Kind="{Binding Star, Converter={StaticResource StarBoolToPackIconKindConverter}}" />
                                     <TextBlock
                                         Grid.Row="0"
                                         Grid.Column="2"
@@ -256,69 +264,86 @@
                                         FontSize="18"
                                         FontWeight="Bold"
                                         Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
-                                        Text="{Binding Name}" />
-
+                                        Text="{Binding Name}"
+                                        TextDecorations="{Binding IsDone, Converter={StaticResource BoolToTextDecorationsConverter}}" />
+                                    <Button
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Margin="0"
+                                        Padding="0"
+                                        VerticalAlignment="Top"
+                                        Background="Transparent"
+                                        BorderBrush="Transparent"
+                                        BorderThickness="0">
+                                        <materialDesign:PackIcon Kind="ChevronDown" />
+                                        <b:Interaction.Behaviors>
+                                            <behaviors:ExpandListViewButtonBehavior IsDisabled="{Binding SubTasks.IsEmpty}" TargetListView="{Binding ElementName=SmallSubTaskListView}" />
+                                        </b:Interaction.Behaviors>
+                                    </Button>
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="2"
                                         Grid.ColumnSpan="2"
                                         Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
                                         Text="{Binding SubTasks, Converter={StaticResource SubTasksToStatusHeaderConverter}}" />
-                                    <ScrollViewer
+
+                                    <ListView
+                                        x:Name="SmallSubTaskListView"
                                         Grid.Row="2"
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2"
+                                        Height="0"
                                         MaxHeight="100"
                                         Margin="0,20,0,0"
-                                        VerticalScrollBarVisibility="Auto">
-                                        <ListView ItemsSource="{Binding SubTasks}">
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate DataType="models:ToDoSubTask">
+                                        ItemsSource="{Binding SubTasks}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate DataType="models:ToDoSubTask">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.ContextMenu>
+                                                        <ContextMenu>
+                                                            <MenuItem
+                                                                Command="{Binding ViewModel.DeleteSubTaskCommand, Source={x:Reference Host}}"
+                                                                CommandParameter="{Binding}"
+                                                                Header="Delete SubTask" />
+                                                        </ContextMenu>
+                                                    </Grid.ContextMenu>
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
                                                             <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
                                                         </Grid.ColumnDefinitions>
-                                                        <Grid.ContextMenu>
-                                                            <ContextMenu>
-                                                                <MenuItem
-                                                                    Command="{Binding ViewModel.DeleteSubTaskCommand, Source={x:Reference Host}}"
-                                                                    CommandParameter="{Binding}"
-                                                                    Header="Delete SubTask" />
-                                                            </ContextMenu>
-                                                        </Grid.ContextMenu>
-                                                        <Grid>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="Auto" />
-                                                                <ColumnDefinition Width="*" />
-                                                                <ColumnDefinition Width="Auto" />
-                                                            </Grid.ColumnDefinitions>
-                                                            <Button
-                                                                Background="Transparent"
-                                                                Command="{Binding ViewModel.ToggleSubTaskCommand, ElementName=Host}"
-                                                                CommandParameter="{Binding}">
-                                                                <Button.Style>
-                                                                    <Style TargetType="Button" />
-                                                                </Button.Style>
+                                                        <Button
+                                                            Background="Transparent"
+                                                            BorderBrush="Transparent"
+                                                            Command="{Binding ViewModel.ToggleSubTaskCommand, ElementName=Host}"
+                                                            CommandParameter="{Binding}">
+                                                            <Button.Style>
+                                                                <Style TargetType="Button" />
+                                                            </Button.Style>
 
-                                                                <materialDesign:PackIcon
-                                                                    VerticalAlignment="Center"
-                                                                    Foreground="Gray"
-                                                                    Kind="{Binding IsDone, Converter={StaticResource BoolToPackIconKindConverter}}" />
-                                                            </Button>
-                                                            <TextBox
-                                                                Grid.Column="2"
-                                                                Margin="10,0,0,0"
-                                                                FontSize="12"
-                                                                FontWeight="Bold"
-                                                                Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
-                                                                Text="{Binding Name}" />
+                                                            <materialDesign:PackIcon
+                                                                VerticalAlignment="Center"
+                                                                Foreground="Gray"
+                                                                Kind="{Binding IsDone, Converter={StaticResource BoolToPackIconKindConverter}}" />
+                                                        </Button>
+                                                        <TextBox
+                                                            Grid.Column="2"
+                                                            Margin="10,0,0,0"
+                                                            FontSize="12"
+                                                            FontWeight="Bold"
+                                                            Foreground="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToBrushConverter}}"
+                                                            Text="{Binding Name}"
+                                                            TextDecorations="{Binding IsDone, Converter={StaticResource BoolToTextDecorationsConverter}}" />
 
-                                                        </Grid>
                                                     </Grid>
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                        </ListView>
-                                    </ScrollViewer>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
                                 </Grid>
                             </Border>
 
@@ -397,6 +422,7 @@
                                 Margin="0"
                                 Padding="0"
                                 Background="Transparent"
+                                BorderBrush="Transparent"
                                 Command="{Binding ToggleTaskCommand}"
                                 CommandParameter="{Binding SelectedTask}">
                                 <Button.Style>
@@ -422,7 +448,7 @@
                                 Grid.Column="0"
                                 Grid.ColumnSpan="2"
                                 ItemsSource="{Binding SelectedTask.SubTasks}"
-                                Visibility="{Binding SelectedTask, Converter={StaticResource SelectedItemToSubtaskVisiblityConverter}}">
+                                Visibility="{Binding SelectedTask.SubTasks.IsEmpty, Converter={StaticResource InvertedBoolToVisibilityConverter}}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="models:ToDoSubTask">
                                         <Grid HorizontalAlignment="Stretch">
@@ -498,7 +524,36 @@
                                 KeyDown="AddSubTaskTextBox_OnKeyDown"
                                 Text="{Binding NewSubTaskName, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
+                    </Border>
 
+                    <Border Style="{StaticResource PropertyBorderStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <materialDesign:PackIcon
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Foreground="{Binding SelectedGroup.IconBrush}"
+                                Kind="{Binding SelectedTask.Star, Converter={StaticResource StarBoolToPackIconKindConverter}}" />
+                            <Button
+                                Grid.Column="1"
+                                Margin="10,0,0,0"
+                                Padding="0"
+                                HorizontalAlignment="Left"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                Command="{Binding ToggleStarTaskCommand}">
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    FontSize="13"
+                                    FontWeight="Bold"
+                                    Foreground="Gray"
+                                    Text="Make important" />
+                            </Button>
+                        </Grid>
                     </Border>
                     <controls:PropertyControl
                         IconBrush="Gray"

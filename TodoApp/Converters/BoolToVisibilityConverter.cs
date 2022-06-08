@@ -4,24 +4,28 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media.Animation;
-using TodoApp.Models;
 
 namespace TodoApp.Converters
 {
-    public class SelectedGroupToTextConverter : IValueConverter
+    public class BoolToVisibilityConverter : IValueConverter
     {
-        public string FallBackValue { get; set; } = "No group selected";
+        public bool Inverted { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is not TaskGroup taskGroup)
+            if (value is not bool booleanValue)
             {
-                return FallBackValue;
+                return value;
             }
 
-            return taskGroup.Name;
+            if (Inverted)
+            {
+                booleanValue = !booleanValue;
+            }
+
+            return booleanValue ? Visibility.Visible : Visibility.Hidden;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
