@@ -27,6 +27,9 @@ namespace TodoApp.ViewModels
             AddTaskCommand = new RelayCommand(AddTask);
             ToggleTaskCommand = new RelayCommand<ToDoTask>(ToggleTask);
             ToggleSubTaskCommand = new RelayCommand<ToDoSubTask>(ToggleSubTask);
+            DeleteTaskCommand = new RelayCommand<ToDoTask>(DeleteTask);
+            DeleteGroupCommand = new RelayCommand<TaskGroup>(DeleteGroup);
+            DeleteSubTaskCommand = new RelayCommand<ToDoSubTask>(DeleteSubTask);
 
             TaskGroups.Add(new TaskGroup("My Day", Colors.CornflowerBlue, PackIconKind.WeatherSunny));
             TaskGroups.Add(new TaskGroup("Important", Colors.IndianRed, PackIconKind.StarOutline));
@@ -40,6 +43,38 @@ namespace TodoApp.ViewModels
             _ = RaiseAllPropertiesChanged();
         }
 
+        private void DeleteSubTask(ToDoSubTask subTask)
+        {
+            if (subTask is null)
+            {
+                return;
+            }
+
+            SelectedTask?.SubTasks.Remove(subTask);
+        }
+
+        private void DeleteGroup(TaskGroup group)
+        {
+            if (group is null)
+            {
+                return;
+            }
+
+            TaskGroups.Remove(group);
+            SelectedGroup = null;
+        }
+
+        private void DeleteTask(ToDoTask task)
+        {
+            if (task is null)
+            {
+                return;
+            }
+
+            SelectedGroup?.Tasks.Remove(task);
+            SelectedTask = null; //null selected task
+        }
+
         private void ToggleSubTask(ToDoSubTask subTask)
         {
             if (subTask is null)
@@ -48,6 +83,7 @@ namespace TodoApp.ViewModels
             }
             subTask.IsDone = !subTask.IsDone;
             subTask.RaisePropertyChanged("IsDone");
+            SelectedTask?.RaiseAllPropertiesChanged();
         }
 
         private void ToggleTask(ToDoTask task)
@@ -57,7 +93,7 @@ namespace TodoApp.ViewModels
                 return;
             }
             task.IsDone = !task.IsDone;
-            task.RaisePropertyChanged("IsDone");
+            SelectedTask?.RaiseAllPropertiesChanged();
         }
 
         public void AddTask()
@@ -79,6 +115,7 @@ namespace TodoApp.ViewModels
 
             SelectedTask?.SubTasks.Add(new ToDoSubTask {Name = NewSubTaskName});
             NewSubTaskName = string.Empty; //clear form
+            SelectedTask?.RaiseAllPropertiesChanged();
         }
 
         private void AddGroup(string groupName)
@@ -129,5 +166,11 @@ namespace TodoApp.ViewModels
         public IRelayCommand<ToDoTask> ToggleTaskCommand { get; }
 
         public IRelayCommand<ToDoSubTask> ToggleSubTaskCommand { get; }
+
+        public IRelayCommand<ToDoTask> DeleteTaskCommand { get; }
+
+        public IRelayCommand<TaskGroup> DeleteGroupCommand { get; }
+
+        public IRelayCommand<ToDoSubTask> DeleteSubTaskCommand { get; }
     }
 }

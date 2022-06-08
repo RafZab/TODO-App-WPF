@@ -83,7 +83,7 @@
                 x:Name="GroupListView"
                 Grid.Row="3"
                 ItemsSource="{Binding TaskGroups}"
-                SelectedItem="{Binding SelectedGroup, Mode=OneWayToSource}">
+                SelectedItem="{Binding SelectedGroup}">
                 <ListView.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:TaskGroup}">
                         <Grid>
@@ -91,6 +91,14 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem
+                                        Command="{Binding ViewModel.DeleteGroupCommand, Source={x:Reference Host}}"
+                                        CommandParameter="{Binding}"
+                                        Header="Delete Group" />
+                                </ContextMenu>
+                            </Grid.ContextMenu>
                             <materialDesign:PackIcon
                                 Width="30"
                                 Height="30"
@@ -187,7 +195,7 @@
                     x:Name="TasksListView"
                     Grid.Row="2"
                     ItemsSource="{Binding SelectedItem, ElementName=GroupListView, Converter={StaticResource SelectedGroupToTasksConverter}}"
-                    SelectedItem="{Binding SelectedTask, Mode=OneWayToSource}">
+                    SelectedItem="{Binding SelectedTask}">
                     <b:Interaction.Behaviors>
                         <behaviors:TaskListPropertiesBehavior PropertyMenu="{Binding ElementName=PropertiesPanel}" TargetGrid="{Binding ElementName=MainGrid}" />
                     </b:Interaction.Behaviors>
@@ -199,6 +207,14 @@
                                 HorizontalAlignment="Stretch"
                                 Background="{StaticResource PrimaryBorderPropertyColorBrush}"
                                 CornerRadius="2">
+                                <Border.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem
+                                            Command="{Binding ViewModel.DeleteTaskCommand, Source={x:Reference Host}}"
+                                            CommandParameter="{Binding}"
+                                            Header="Delete Task" />
+                                    </ContextMenu>
+                                </Border.ContextMenu>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
@@ -262,6 +278,14 @@
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*" />
                                                         </Grid.ColumnDefinitions>
+                                                        <Grid.ContextMenu>
+                                                            <ContextMenu>
+                                                                <MenuItem
+                                                                    Command="{Binding ViewModel.DeleteSubTaskCommand, Source={x:Reference Host}}"
+                                                                    CommandParameter="{Binding}"
+                                                                    Header="Delete SubTask" />
+                                                            </ContextMenu>
+                                                        </Grid.ContextMenu>
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="Auto" />
@@ -401,10 +425,18 @@
                                 Visibility="{Binding SelectedTask, Converter={StaticResource SelectedItemToSubtaskVisiblityConverter}}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="models:ToDoSubTask">
-                                        <Grid>
+                                        <Grid HorizontalAlignment="Stretch">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
+                                            <Grid.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem
+                                                        Command="{Binding ViewModel.DeleteSubTaskCommand, Source={x:Reference Host}}"
+                                                        CommandParameter="{Binding}"
+                                                        Header="Delete SubTask" />
+                                                </ContextMenu>
+                                            </Grid.ContextMenu>
                                             <Border
                                                 Margin="10"
                                                 Padding="10,10"
