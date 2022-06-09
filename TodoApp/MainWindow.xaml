@@ -590,7 +590,7 @@
                             <xctk:DateTimePicker
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Margin="10,0,0,0"
+                                Margin="10,10,0,0"
                                 Padding="0"
                                 HorizontalAlignment="Left"
                                 AutoCloseCalendar="True"
