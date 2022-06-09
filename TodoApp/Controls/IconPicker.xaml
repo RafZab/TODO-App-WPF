@@ -10,7 +10,7 @@
     mc:Ignorable="d">
     <Grid DataContext="{Binding ElementName=Control}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <ListView

@@ -41,7 +41,7 @@ namespace TodoApp.Controls
         {
             Random rnd = new Random(DateTime.Now.Millisecond);
             var icons = new List<PackIconKind>();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
                 icons.Add((PackIconKind)rnd.Next(0, 6700));
             }

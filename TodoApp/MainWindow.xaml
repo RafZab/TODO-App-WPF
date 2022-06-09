@@ -12,6 +12,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:TodoApp.Models"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     x:Name="Host"
     Title="To Do List"
     Width="1080"
@@ -42,6 +43,7 @@
         <converters:SelectedItemToSubtaskListConverter x:Key="SelectedItemToSubtaskListConverter" />
         <converters:SelectedItemToNameConverter x:Key="SelectedItemToNameConverter" />
         <converters:BoolToTextDecorationsConverter x:Key="BoolToTextDecorationsConverter" TrueDecorations="Strikethrough" />
+        <converters:DateTimeToTextConverter x:Key="DateTimeToTextConverter" />
     </Window.Resources>
     <Grid x:Name="MainGrid" Background="{StaticResource SecondaryBackgroundColorBrush}">
         <Grid.ColumnDefinitions>
@@ -135,15 +137,15 @@
                         Grid.Column="0"
                         MaxHeight="80"
                         Margin="5"
+                        materialDesign:HintAssist.Hint="New group"
                         Foreground="White"
-                        Text="New group"
+                        Text="{Binding NewGroupName}"
                         TextWrapping="Wrap"
                         VerticalScrollBarVisibility="Auto" />
                     <Button
                         Grid.Column="1"
                         VerticalAlignment="Bottom"
                         Command="{Binding AddGroupCommand}"
-                        CommandParameter="{Binding Text, ElementName=GroupNameTextBox}"
                         Style="{StaticResource MaterialDesignFlatButton}">
                         <materialDesign:PackIcon Kind="Add" />
                     </Button>
@@ -555,6 +557,37 @@
                             </Button>
                         </Grid>
                     </Border>
+
+                    <Border Style="{StaticResource PropertyBorderStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <materialDesign:PackIcon
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Foreground="{Binding SelectedGroup.IconBrush}"
+                                Kind="AlarmAdd" />
+                            <xctk:DateTimePicker
+                                Grid.Column="1"
+                                Margin="10,0,0,0"
+                                Padding="0"
+                                HorizontalAlignment="Left"
+                                AutoCloseCalendar="True"
+                                Value="{Binding SelectedTask.Reminder}" />
+                            <!--<DatePicker
+                                Grid.Column="1"
+                                Margin="10,0,0,0"
+                                Padding="0"
+                                HorizontalAlignment="Left"
+                                Foreground="White"
+                                SelectedDate="{Binding SelectedTask.Reminder}"
+                                Text="{Binding SelectedTask, Converter={StaticResource DateTimeToTextConverter}}" />-->
+                        </Grid>
+                    </Border>
+
                     <controls:PropertyControl
                         IconBrush="Gray"
                         IconHeight="30"

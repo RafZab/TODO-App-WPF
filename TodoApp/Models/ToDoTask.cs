@@ -9,7 +9,7 @@ namespace TodoApp.Models
         private DateTime _created;
         private string _name;
         private bool _isDone;
-        private DateTime _reminder;
+        private DateTime? _reminder;
         private string _repeat;
         private string _note;
         private bool _star;
@@ -32,7 +32,7 @@ namespace TodoApp.Models
             set => SetProperty(ref _isDone, value);
         }
 
-        public DateTime Reminder
+        public DateTime? Reminder
         {
             get => _reminder;
             set => SetProperty(ref _reminder, value);

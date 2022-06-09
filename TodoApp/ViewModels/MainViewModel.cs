@@ -1,9 +1,16 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Toolkit.Mvvm.Input;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Messages;
+using ToastNotifications.Position;
 using TodoApp.Models;
 using TodoApp.Services;
 using TodoApp.Views;
@@ -16,6 +23,10 @@ namespace TodoApp.ViewModels
         private ToDoTask _selectedTask;
         private string _newTaskName;
         private string _newSubTaskName;
+        private string _newGroupName;
+        private Notifier _notifier;
+
+        private BackgroundWorker _worker;
 
         public DateTime CurrentDate { get; } = DateTime.Today;
 
@@ -24,8 +35,9 @@ namespace TodoApp.ViewModels
         public MainViewModel()
         {
             TaskGroups = new ExtendedObservableCollection<TaskGroup>();
+            _worker = new BackgroundWorker();
 
-            AddGroupCommand = new RelayCommand<string>(AddGroup);
+            AddGroupCommand = new RelayCommand(AddGroup);
             AddTaskCommand = new RelayCommand(AddTask);
             ToggleTaskCommand = new RelayCommand<ToDoTask>(ToggleTask);
             ToggleSubTaskCommand = new RelayCommand<ToDoSubTask>(ToggleSubTask);
@@ -39,6 +51,53 @@ namespace TodoApp.ViewModels
             SelectedGroup = TaskGroups.First();
             SelectedTask = null;
             _ = RaiseAllPropertiesChanged();
+
+            _notifier = new Notifier(cfg =>
+            {
+                cfg.PositionProvider = new WindowPositionProvider(
+                    parentWindow: Application.Current.MainWindow,
+                    corner: Corner.TopRight,
+                    offsetX: 10,
+                    offsetY: 10);
+
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                    notificationLifetime: TimeSpan.FromSeconds(3),
+                    maximumNotificationCount: MaximumNotificationCount.FromCount(5));
+
+                cfg.Dispatcher = Application.Current.Dispatcher;
+            });
+
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += TimerTick;
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Start();
+        }
+
+        private void TimerTick(object sender, EventArgs e)
+        {
+            var tasks = TaskGroups.SelectMany(x => x.Tasks).ToList();
+            foreach (var task in tasks)
+            {
+                if (!task.Reminder.HasValue)
+                {
+                    continue;
+                }
+
+                var reminder = task.Reminder.Value;
+
+                var reminderDate = new DateTime(reminder.Year, reminder.Month, reminder.Day, reminder.Hour, reminder.Minute, 0,
+                    DateTimeKind.Local);
+
+                var dateNow = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0,
+                    DateTimeKind.Local);
+
+                if (reminderDate <= dateNow)
+                {
+                    _notifier.ShowInformation($"Reminding of {task.Name}");
+
+                    task.Reminder = null;
+                }
+            }
         }
 
         private void LoadData()
@@ -94,6 +153,7 @@ namespace TodoApp.ViewModels
             SelectedTask?.SubTasks.Remove(subTask);
             OnOnRefreshRequest();
             SaveData();
+            _notifier.ShowSuccess("Sub task deleted");
         }
 
         private void DeleteGroup(TaskGroup group)
@@ -112,6 +172,7 @@ namespace TodoApp.ViewModels
             TaskGroups.Remove(group);
             SelectedGroup = null;
             SaveData();
+            _notifier.ShowSuccess("Group deleted");
         }
 
         private void DeleteTask(ToDoTask task)
@@ -130,6 +191,7 @@ namespace TodoApp.ViewModels
             SelectedGroup?.Tasks.Remove(task);
             SelectedTask = null; //null selected task
             SaveData();
+            _notifier.ShowSuccess("Task deleted");
         }
 
         private void ToggleSubTask(ToDoSubTask subTask)
@@ -185,11 +247,13 @@ namespace TodoApp.ViewModels
             SaveData();
         }
 
-        private void AddGroup(string groupName)
+        private void AddGroup()
         {
-            //TaskGroups.Add(new TaskGroup(groupName, Brushes.Gray, PackIconKind.FilterList));
-            var dialog = new AddGroupWindow(groupName);
-
+            if (string.IsNullOrWhiteSpace(NewGroupName))
+            {
+                return;
+            }
+            var dialog = new AddGroupWindow(NewGroupName);
             var result = dialog.ShowDialogWithResult();
 
             if (result is null)
@@ -199,6 +263,7 @@ namespace TodoApp.ViewModels
             
             TaskGroups.Add(result);
             SaveData();
+            NewGroupName = string.Empty;
         }
 
         public TaskGroup SelectedGroup
@@ -225,9 +290,15 @@ namespace TodoApp.ViewModels
             set => SetProperty(ref _newSubTaskName, value);
         }
 
+        public string NewGroupName
+        {
+            get => _newGroupName;
+            set => SetProperty(ref _newGroupName, value);
+        }
+
         public ExtendedObservableCollection<TaskGroup> TaskGroups { get; }
 
-        public IRelayCommand<string> AddGroupCommand { get; }
+        public IRelayCommand AddGroupCommand { get; }
 
         public IRelayCommand AddTaskCommand { get; }
 
