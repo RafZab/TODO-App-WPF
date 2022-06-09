@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using TodoApp.Models;
+using TodoApp.ViewModels;
 
 namespace TodoApp.Views
 {
@@ -19,9 +9,28 @@ namespace TodoApp.Views
     /// </summary>
     public partial class EditGroupWindow : Window
     {
-        public EditGroupWindow()
+        public EditGroupWindow(TaskGroup taskGroup)
         {
+            ViewModel = new EditGroupViewModel(taskGroup);
+            ViewModel.OnRequestClose += ViewModelOnOnRequestClose;
+
             InitializeComponent();
+        }
+
+        public TaskGroup Result { get; set; }
+
+        public EditGroupViewModel ViewModel { get; set; }
+
+        public TaskGroup ShowDialogWithResult()
+        {
+            ShowDialog();
+            return Result;
+        }
+
+        private void ViewModelOnOnRequestClose(object sender, AddGroupDialogCloseEventArgs e)
+        {
+            Result = e.Group;
+            Host.Close();
         }
     }
 }

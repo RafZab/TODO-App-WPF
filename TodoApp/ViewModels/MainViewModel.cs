@@ -36,6 +36,7 @@ namespace TodoApp.ViewModels
             TaskGroups = new ExtendedObservableCollection<TaskGroup>();
             
             AddGroupCommand = new RelayCommand(AddGroup);
+            EditGroupCommand = new RelayCommand<TaskGroup>(EditGroup);
             AddTaskCommand = new RelayCommand(AddTask);
             ToggleTaskCommand = new RelayCommand<ToDoTask>(ToggleTask);
             ToggleSubTaskCommand = new RelayCommand<ToDoSubTask>(ToggleSubTask);
@@ -69,6 +70,24 @@ namespace TodoApp.ViewModels
             dispatcherTimer.Tick += TimerTick;
             dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
             dispatcherTimer.Start();
+        }
+
+        private void EditGroup(TaskGroup group)
+        {
+            if (group == null)
+            {
+                return;
+            }
+
+            var dialog = new EditGroupWindow(group);
+            var result = dialog.ShowDialogWithResult();
+            if (result is null)
+            {
+                return;
+            }
+
+            TaskGroups[TaskGroups.IndexOf(group)] = result; //replace :/
+            SelectedGroup?.RaiseAllPropertiesChanged();
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -202,7 +221,6 @@ namespace TodoApp.ViewModels
                 return;
             }
             subTask.IsDone = !subTask.IsDone;
-            subTask.RaisePropertyChanged("IsDone");
             subTask.RaiseAllPropertiesChanged();
             SelectedTask?.RaiseAllPropertiesChanged();
             SaveData();
@@ -305,6 +323,8 @@ namespace TodoApp.ViewModels
         public ExtendedObservableCollection<TaskGroup> TaskGroups { get; }
 
         public IRelayCommand AddGroupCommand { get; }
+
+        public IRelayCommand<TaskGroup> EditGroupCommand { get; }
 
         public IRelayCommand AddTaskCommand { get; }
 

@@ -8,7 +8,7 @@ namespace TodoApp.Models
     public class TaskGroup : ExtendedNotifyPropertyChanged
     {
         private string _name;
-        private Brush _iconBrush;
+        private SolidColorBrush _iconBrush;
         private PackIconKind _icon;
 
         public string Name
@@ -17,7 +17,7 @@ namespace TodoApp.Models
             set => SetProperty(ref _name, value);
         }
 
-        public Brush IconBrush
+        public SolidColorBrush IconBrush
         {
             get => _iconBrush;
             set => SetProperty(ref _iconBrush, value);
@@ -30,7 +30,7 @@ namespace TodoApp.Models
         }
         public ExtendedObservableCollection<ToDoTask> Tasks { get; set; } = new ExtendedObservableCollection<ToDoTask>();
 
-        public TaskGroup(string name, Brush iconBrush, PackIconKind icon)
+        public TaskGroup(string name, SolidColorBrush iconBrush, PackIconKind icon)
         {
             Name = name;
             IconBrush = iconBrush;

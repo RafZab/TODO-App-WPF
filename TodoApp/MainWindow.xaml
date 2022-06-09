@@ -102,6 +102,10 @@
                             <Grid.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem
+                                        Command="{Binding ViewModel.EditGroupCommand, Source={x:Reference Host}}"
+                                        CommandParameter="{Binding}"
+                                        Header="Edit Group" />
+                                    <MenuItem
                                         Command="{Binding ViewModel.DeleteGroupCommand, Source={x:Reference Host}}"
                                         CommandParameter="{Binding}"
                                         Header="Delete Group" />
@@ -560,17 +564,31 @@
 
                     <Border Style="{StaticResource PropertyBorderStyle}">
                         <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <materialDesign:PackIcon
+                                Grid.Row="0"
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
                                 Foreground="{Binding SelectedGroup.IconBrush}"
                                 Kind="AlarmAdd" />
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="10,0,0,0"
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Foreground="Gray"
+                                Text="Add alarm" />
                             <xctk:DateTimePicker
+                                Grid.Row="1"
                                 Grid.Column="1"
                                 Margin="10,0,0,0"
                                 Padding="0"
@@ -579,33 +597,6 @@
                                 Value="{Binding SelectedTask.Reminder}" />
                         </Grid>
                     </Border>
-
-                    <controls:PropertyControl
-                        IconBrush="Gray"
-                        IconHeight="30"
-                        IconKind="AlarmAdd"
-                        IconWidth="30"
-                        Text="Set alarm"
-                        TextBrush="Gray"
-                        TextFontSize="13" />
-
-                    <controls:PropertyControl
-                        IconBrush="Gray"
-                        IconHeight="30"
-                        IconKind="CalendarAlert"
-                        IconWidth="30"
-                        Text="Deadline"
-                        TextBrush="Gray"
-                        TextFontSize="13" />
-
-                    <controls:PropertyControl
-                        IconBrush="Gray"
-                        IconHeight="30"
-                        IconKind="CalendarRepeat"
-                        IconWidth="30"
-                        Text="Repeat"
-                        TextBrush="Gray"
-                        TextFontSize="13" />
 
                     <TextBlock
                         Margin="20,0"

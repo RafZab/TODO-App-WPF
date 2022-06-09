@@ -1,12 +1,46 @@
-﻿<Window x:Class="TodoApp.Views.EditGroupWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TodoApp.Views"
-        mc:Ignorable="d"
-        Title="EditGroupWindow" Height="450" Width="800">
-    <Grid>
-        
+﻿<Window
+    x:Class="TodoApp.Views.EditGroupWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TodoApp.Controls"
+    xmlns:converters="clr-namespace:TodoApp.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TodoApp.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pt="http://propertytools.org/wpf"
+    x:Name="Host"
+    Title="Add group"
+    Width="530"
+    Height="480"
+    Padding="20"
+    DataContext="{Binding ViewModel, ElementName=Host}"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Grid Background="{StaticResource SecondaryBackgroundColorBrush}">
+        <Grid.Resources>
+            <converters:SolidBrushToColorConverter x:Key="SolidBrushToColorConverter" />
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="360" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBox
+            Grid.Row="0"
+            materialDesign:HintAssist.Hint="Name"
+            Foreground="White"
+            Text="{Binding TaskGroup.Name}" />
+        <pt:ColorPicker Grid.Row="1" SelectedColor="{Binding TaskGroup.IconBrush, Converter={StaticResource SolidBrushToColorConverter}}" />
+
+        <controls:IconPicker
+            Grid.Row="2"
+            Grid.Column="0"
+            SelectedIcon="{Binding TaskGroup.Icon}" />
     </Grid>
 </Window>
