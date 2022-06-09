@@ -6,10 +6,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TodoApp.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="Host"
     Title="Settings"
     Width="800"
     Height="450"
     Background="{StaticResource SecondaryBackgroundColorBrush}"
+    Closing="HostWindowClosing"
+    DataContext="{Binding ViewModel, ElementName=Host}"
     Icon="../Resources/Assets/logo.png"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -44,7 +47,7 @@
             <Label
                 Grid.Row="1"
                 Grid.Column="1"
-                Content="Add a new task at the top"
+                Content="Display alerts after actions"
                 FontSize="12" />
 
             <Grid Grid.Row="2" Grid.Column="1">
@@ -54,7 +57,7 @@
                 </Grid.ColumnDefinitions>
                 <controls:BooleanSettingControl
                     Grid.Column="0"
-                    IsSettingEnabled="False"
+                    IsSettingEnabled="{Binding Settings.DisplayActionAlerts}"
                     SettingName="Setting 1" />
                 <TextBlock
                     Grid.Column="1"
@@ -66,7 +69,7 @@
             <Label
                 Grid.Row="3"
                 Grid.Column="1"
-                Content="Move the tasks marked with an asterisk to the top"
+                Content="Display alarm alerts"
                 FontSize="12" />
             <Grid Grid.Row="4" Grid.Column="1">
                 <Grid.ColumnDefinitions>
@@ -75,7 +78,7 @@
                 </Grid.ColumnDefinitions>
                 <controls:BooleanSettingControl
                     Grid.Column="0"
-                    IsSettingEnabled="False"
+                    IsSettingEnabled="{Binding Settings.DisplayAlerts}"
                     SettingName="Setting 2" />
                 <TextBlock
                     Grid.Column="1"
@@ -95,7 +98,7 @@
                 </Grid.ColumnDefinitions>
                 <controls:BooleanSettingControl
                     Grid.Column="0"
-                    IsSettingEnabled="False"
+                    IsSettingEnabled="{Binding Settings.PlaySound}"
                     SettingName="Setting 3" />
                 <TextBlock
                     Grid.Column="1"
@@ -115,7 +118,7 @@
                 </Grid.ColumnDefinitions>
                 <controls:BooleanSettingControl
                     Grid.Column="0"
-                    IsSettingEnabled="False"
+                    IsSettingEnabled="{Binding Settings.ConfirmActions}"
                     SettingName="Setting 4" />
                 <TextBlock
                     Grid.Column="1"

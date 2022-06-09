@@ -17,6 +17,12 @@ namespace TodoApp.Services
 
         public void PlayDoneSound()
         {
+            var settings = DataProvider.Instance.LoadAppSettings();
+            if (!settings.PlaySound)
+            {
+                return;
+            }
+
             var sound = new SoundPlayer($"./Resources/Sound/{doneSound}");
             sound.Play();
         }

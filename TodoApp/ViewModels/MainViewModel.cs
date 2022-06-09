@@ -1,17 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
-using System.Media;
-using System.Threading;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Threading;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Toolkit.Mvvm.Input;
-using ToastNotifications;
-using ToastNotifications.Lifetime;
-using ToastNotifications.Messages;
-using ToastNotifications.Position;
 using TodoApp.Models;
 using TodoApp.Services;
 using TodoApp.Views;
@@ -25,7 +17,6 @@ namespace TodoApp.ViewModels
         private string _newTaskName;
         private string _newSubTaskName;
         private string _newGroupName;
-        private Notifier _notifier;
 
         public DateTime CurrentDate { get; } = DateTime.Today;
 
@@ -50,26 +41,6 @@ namespace TodoApp.ViewModels
             SelectedGroup = TaskGroups.First();
             SelectedTask = null;
             _ = RaiseAllPropertiesChanged();
-
-            _notifier = new Notifier(cfg =>
-            {
-                cfg.PositionProvider = new WindowPositionProvider(
-                    parentWindow: Application.Current.MainWindow,
-                    corner: Corner.TopRight,
-                    offsetX: 10,
-                    offsetY: 10);
-
-                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                    notificationLifetime: TimeSpan.FromSeconds(5),
-                    maximumNotificationCount: MaximumNotificationCount.FromCount(5));
-
-                cfg.Dispatcher = Application.Current.Dispatcher;
-            });
-
-            DispatcherTimer dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += TimerTick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
-            dispatcherTimer.Start();
         }
 
         private void EditGroup(TaskGroup group)
@@ -110,10 +81,7 @@ namespace TodoApp.ViewModels
 
                 if (reminderDate <= dateNow)
                 {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        _notifier.ShowInformation($"Reminding of {task.Name}");
-                    });
+                    NotificationService.Instance.ShowAlert($"Reminding of {task.Name}");
 
                     task.Reminder = null;
                 }
@@ -164,7 +132,7 @@ namespace TodoApp.ViewModels
                 return;
             }
 
-            var result = MessageBox.Show("Do you really want to delete this subtask?", "Delete SubTask", MessageBoxButton.YesNo);
+            var result = DisplayMessageBox("Do you really want to delete this subtask?", "Delete SubTask", MessageBoxButton.YesNo);
             if (result != MessageBoxResult.Yes)
             {
                 return;
@@ -173,7 +141,7 @@ namespace TodoApp.ViewModels
             SelectedTask?.SubTasks.Remove(subTask);
             OnOnRefreshRequest();
             SaveData();
-            _notifier.ShowSuccess("Sub task deleted");
+            NotificationService.Instance.ShowActionResult("Sub task deleted");
         }
 
         private void DeleteGroup(TaskGroup group)
@@ -183,7 +151,7 @@ namespace TodoApp.ViewModels
                 return;
             }
 
-            var result = MessageBox.Show("Do you really want to delete this task group?", "Delete Group", MessageBoxButton.YesNo);
+            var result = DisplayMessageBox("Do you really want to delete this task group?", "Delete Group", MessageBoxButton.YesNo);
             if (result != MessageBoxResult.Yes)
             {
                 return;
@@ -192,7 +160,7 @@ namespace TodoApp.ViewModels
             TaskGroups.Remove(group);
             SelectedGroup = null;
             SaveData();
-            _notifier.ShowSuccess("Group deleted");
+            NotificationService.Instance.ShowActionResult("Group deleted");
         }
 
         private void DeleteTask(ToDoTask task)
@@ -202,7 +170,7 @@ namespace TodoApp.ViewModels
                 return;
             }
 
-            var result =MessageBox.Show( "Do you really want to delete this task?", "Delete Task", MessageBoxButton.YesNo);
+            var result = DisplayMessageBox( "Do you really want to delete this task?", "Delete Task", MessageBoxButton.YesNo);
             if (result != MessageBoxResult.Yes)
             {
                 return;
@@ -211,7 +179,7 @@ namespace TodoApp.ViewModels
             SelectedGroup?.Tasks.Remove(task);
             SelectedTask = null; //null selected task
             SaveData();
-            _notifier.ShowSuccess("Task deleted");
+            NotificationService.Instance.ShowActionResult("Task deleted");
         }
 
         private void ToggleSubTask(ToDoSubTask subTask)
@@ -318,6 +286,17 @@ namespace TodoApp.ViewModels
         {
             get => _newGroupName;
             set => SetProperty(ref _newGroupName, value);
+        }
+
+        private MessageBoxResult DisplayMessageBox(string message, string caption, MessageBoxButton button)
+        {
+            var settings = DataProvider.Instance.LoadAppSettings();
+            if (!settings.ConfirmActions)
+            {
+                return MessageBoxResult.Yes;
+            }
+
+            return MessageBox.Show(message, caption, button);
         }
 
         public ExtendedObservableCollection<TaskGroup> TaskGroups { get; }
