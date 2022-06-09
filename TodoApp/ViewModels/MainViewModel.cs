@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Toolkit.Mvvm.Input;
 using TodoApp.Models;
@@ -41,6 +42,11 @@ namespace TodoApp.ViewModels
             SelectedGroup = TaskGroups.First();
             SelectedTask = null;
             _ = RaiseAllPropertiesChanged();
+
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += TimerTick;
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
+            dispatcherTimer.Start();
         }
 
         private void EditGroup(TaskGroup group)

@@ -42,6 +42,11 @@ namespace TodoApp
         private void OnOnRefreshRequest(object sender, EventArgs e)
         {
             var view = CollectionViewSource.GetDefaultView(TasksListView.ItemsSource);
+            if (view.SortDescriptions.Count == 0)
+            {
+                view.SortDescriptions.Add(new SortDescription("IsDone", ListSortDirection.Ascending));
+                view.SortDescriptions.Add(new SortDescription("Star", ListSortDirection.Descending));
+            }
             view.Refresh();
         }
 
