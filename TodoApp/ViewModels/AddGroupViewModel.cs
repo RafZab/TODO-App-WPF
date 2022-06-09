@@ -16,6 +16,7 @@ namespace TodoApp.ViewModels
     {
         private string _groupName;
         private string _emojiIcon;
+        private PackIconKind _iconKind;
         private Color _theme;
 
         public string GroupName
@@ -28,6 +29,12 @@ namespace TodoApp.ViewModels
         {
             get => _theme;
             set => SetProperty(ref _theme, value);
+        }
+
+        public PackIconKind IconKind
+        {
+            get => _iconKind;
+            set => SetProperty(ref _iconKind, value);
         }
 
         public string EmojiIcon
@@ -43,14 +50,15 @@ namespace TodoApp.ViewModels
             AddGroupCommand = new RelayCommand(AddGroup);
 
             GroupName = groupName;
-            EmojiIcon = "😀";
+            IconKind = PackIconKind.Add;
+            Theme = Colors.Gray;
         }
 
         private void AddGroup()
         {
-            OnRequestClose.Invoke(this, new AddGroupDialogCloseEventArgs
+            OnRequestClose?.Invoke(this, new AddGroupDialogCloseEventArgs
             {
-                Group = new TaskGroup(GroupName, Theme, PackIconKind.ABCOff)
+                Group = new TaskGroup(GroupName, Theme, IconKind)
             });
         }
 

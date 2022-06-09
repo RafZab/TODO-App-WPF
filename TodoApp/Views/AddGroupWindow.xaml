@@ -2,46 +2,46 @@
     x:Class="TodoApp.Views.AddGroupWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TodoApp.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
     xmlns:local="clr-namespace:TodoApp.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:picker="clr-namespace:PropertyTools.Wpf;assembly=PropertyTools.Wpf"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     x:Name="Host"
     Title="Add group"
-    Width="700"
-    Height="300"
+    Width="530"
+    Height="480"
+    Padding="20"
     DataContext="{Binding ViewModel, ElementName=Host}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Grid Background="{StaticResource SecondaryBackgroundColorBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <emoji:Picker FontSize="40" Selection="{Binding EmojiIcon, UpdateSourceTrigger=PropertyChanged}" />
         <TextBox
             Grid.Row="0"
-            Grid.Column="1"
             materialDesign:HintAssist.Hint="Name"
+            Foreground="White"
             Text="{Binding GroupName}" />
-        <materialDesign:ColorPicker
+        <picker:ColorPicker Grid.Row="1" SelectedColor="{Binding Theme}" />
+
+        <controls:IconPicker
             Grid.Row="2"
             Grid.Column="0"
-            Color="{Binding Theme, Mode=OneWayToSource}" />
+            SelectedIcon="{Binding IconKind}" />
         <Button
-            Grid.Row="1"
-            Grid.Column="1"
+            Grid.Row="3"
             Command="{Binding AddGroupCommand}"
             Content="Add group"
             UseLayoutRounding="True" />

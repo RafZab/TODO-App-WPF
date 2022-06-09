@@ -43,5 +43,10 @@ namespace TodoApp.Models
             IconBrush = new SolidColorBrush(iconColor);
             Icon = icon;
         }
+
+        public TaskGroup()
+        {
+            
+        }
     }
 }

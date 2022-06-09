@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -42,6 +43,13 @@ namespace TodoApp.ViewModels
             OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
             onPropertyChanged?.Invoke(newValue);
             return true;
+        }
+
+        public void AddRange(IEnumerable<T> collection)
+        {
+            foreach (var i in collection) Items.Add(i);
+            OnCollectionChanged(
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
     }
 }

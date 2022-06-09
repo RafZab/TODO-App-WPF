@@ -5,6 +5,7 @@ using System.Windows.Media;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Toolkit.Mvvm.Input;
 using TodoApp.Models;
+using TodoApp.Services;
 using TodoApp.Views;
 
 namespace TodoApp.ViewModels
@@ -31,24 +32,41 @@ namespace TodoApp.ViewModels
             DeleteTaskCommand = new RelayCommand<ToDoTask>(DeleteTask);
             DeleteGroupCommand = new RelayCommand<TaskGroup>(DeleteGroup);
             DeleteSubTaskCommand = new RelayCommand<ToDoSubTask>(DeleteSubTask);
-            ToggleStarTaskCommand = new RelayCommand(ToggleStartCommand);
+            ToggleStarTaskCommand = new RelayCommand(ToggleStarCommand);
 
-            TaskGroups.Add(new TaskGroup("My Day", Colors.CornflowerBlue, PackIconKind.WeatherSunny));
-            TaskGroups.Add(new TaskGroup("Important", Colors.IndianRed, PackIconKind.StarOutline));
-            TaskGroups.Add(new TaskGroup("Planned", Colors.MediumAquamarine, PackIconKind.CalendarAccountOutline));
-            TaskGroups.Add(new TaskGroup("Tasks", Colors.SlateBlue, PackIconKind.House));
-            TaskGroups.Add(new TaskGroup("Shopping list", Colors.Gray, PackIconKind.ShoppingCart));
-
-
-            TaskGroups[0].Tasks.Add(new ToDoTask {IsDone = false, Name = "Not done task"});
-            TaskGroups[0].Tasks.Add(new ToDoTask { IsDone = false, Name = "Done task" });
+            LoadData();
 
             SelectedGroup = TaskGroups.First();
             SelectedTask = null;
             _ = RaiseAllPropertiesChanged();
         }
 
-        private void ToggleStartCommand()
+        private void LoadData()
+        {
+            var data = DataProvider.Instance.LoadTaskGroups();
+            TaskGroups.AddRange(data);
+
+            if (TaskGroups.IsEmpty)
+            {
+                InitDefaultData();
+            }
+        }
+
+        private void InitDefaultData()
+        {
+            TaskGroups.Add(new TaskGroup("My Day", Colors.CornflowerBlue, PackIconKind.WeatherSunny));
+            TaskGroups.Add(new TaskGroup("Important", Colors.IndianRed, PackIconKind.StarOutline));
+            TaskGroups.Add(new TaskGroup("Planned", Colors.MediumAquamarine, PackIconKind.CalendarAccountOutline));
+            TaskGroups.Add(new TaskGroup("Tasks", Colors.SlateBlue, PackIconKind.House));
+            TaskGroups.Add(new TaskGroup("Shopping list", Colors.Gray, PackIconKind.ShoppingCart));
+        }
+
+        private void SaveData()
+        {
+            DataProvider.Instance.SaveTaskGroups(TaskGroups.ToList());
+        }
+
+        private void ToggleStarCommand()
         {
             if (SelectedTask is null)
             {
@@ -56,6 +74,8 @@ namespace TodoApp.ViewModels
             }
             SelectedTask.Star = !SelectedTask.Star;
             SelectedTask?.RaiseAllPropertiesChanged();
+            OnOnRefreshRequest();
+            SaveData();
         }
 
         private void DeleteSubTask(ToDoSubTask subTask)
@@ -73,6 +93,7 @@ namespace TodoApp.ViewModels
 
             SelectedTask?.SubTasks.Remove(subTask);
             OnOnRefreshRequest();
+            SaveData();
         }
 
         private void DeleteGroup(TaskGroup group)
@@ -90,6 +111,7 @@ namespace TodoApp.ViewModels
 
             TaskGroups.Remove(group);
             SelectedGroup = null;
+            SaveData();
         }
 
         private void DeleteTask(ToDoTask task)
@@ -107,6 +129,7 @@ namespace TodoApp.ViewModels
 
             SelectedGroup?.Tasks.Remove(task);
             SelectedTask = null; //null selected task
+            SaveData();
         }
 
         private void ToggleSubTask(ToDoSubTask subTask)
@@ -117,7 +140,9 @@ namespace TodoApp.ViewModels
             }
             subTask.IsDone = !subTask.IsDone;
             subTask.RaisePropertyChanged("IsDone");
+            subTask.RaiseAllPropertiesChanged();
             SelectedTask?.RaiseAllPropertiesChanged();
+            SaveData();
         }
 
         private void ToggleTask(ToDoTask task)
@@ -130,6 +155,7 @@ namespace TodoApp.ViewModels
             task.IsDone = !task.IsDone;
             SelectedTask?.RaiseAllPropertiesChanged();
             OnOnRefreshRequest();
+            SaveData();
         }
 
         public void AddTask()
@@ -142,6 +168,7 @@ namespace TodoApp.ViewModels
             SelectedGroup?.Tasks.Add(new ToDoTask { Name = NewTaskName, Created = DateTime.Now});
             NewTaskName = string.Empty; //clear form
             OnOnRefreshRequest();
+            SaveData();
         }
 
         public void AddSubTask()
@@ -155,6 +182,7 @@ namespace TodoApp.ViewModels
             NewSubTaskName = string.Empty; //clear form
             SelectedTask?.RaiseAllPropertiesChanged();
             SelectedGroup?.RaiseAllPropertiesChanged();
+            SaveData();
         }
 
         private void AddGroup(string groupName)
@@ -170,6 +198,7 @@ namespace TodoApp.ViewModels
             }
             
             TaskGroups.Add(result);
+            SaveData();
         }
 
         public TaskGroup SelectedGroup
