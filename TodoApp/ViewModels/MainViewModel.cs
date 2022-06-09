@@ -225,6 +225,12 @@ namespace TodoApp.ViewModels
                 return;
             }
 
+            if (SelectedGroup is null)
+            {
+                NotificationService.Instance.ShowError("There's no group selected!");
+                return;
+            }
+
             SelectedGroup?.Tasks.Add(new ToDoTask { Name = NewTaskName, Created = DateTime.Now});
             NewTaskName = string.Empty; //clear form
             OnOnRefreshRequest();

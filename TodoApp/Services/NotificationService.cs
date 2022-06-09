@@ -65,5 +65,19 @@ namespace TodoApp.Services
                 _notifier.ShowSuccess(message);
             });
         }
+
+        public void ShowError(string message)
+        {
+            var settings = DataProvider.Instance.LoadAppSettings();
+            if (!settings.DisplayActionAlerts)
+            {
+                return;
+            }
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _notifier.ShowError(message);
+            });
+        }
     }
 }

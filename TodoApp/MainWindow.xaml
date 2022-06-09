@@ -375,7 +375,7 @@
                             materialDesign:HintAssist.Hint="New task name"
                             Foreground="White"
                             Text="{Binding NewTaskName}"
-                            TextWrapping="Wrap"
+                            TextWrapping="Wrap" KeyDown="TaskNameTextBox_OnKeyDown"
                             VerticalScrollBarVisibility="Auto" />
                         <Button
                             Grid.Column="2"

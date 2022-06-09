@@ -42,6 +42,11 @@ namespace TodoApp
         private void OnOnRefreshRequest(object sender, EventArgs e)
         {
             var view = CollectionViewSource.GetDefaultView(TasksListView.ItemsSource);
+            if (view is null)
+            {
+                return;
+            }
+
             if (view.SortDescriptions.Count == 0)
             {
                 view.SortDescriptions.Add(new SortDescription("IsDone", ListSortDirection.Ascending));
@@ -95,6 +100,14 @@ namespace TodoApp
             var view = CollectionViewSource.GetDefaultView(TasksListView.ItemsSource);
             view.Filter = TasksFilter;
             view.Refresh();
+        }
+
+        private void TaskNameTextBox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                ViewModel.AddTask();
+            }
         }
     }
 }
