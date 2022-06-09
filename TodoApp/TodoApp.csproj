@@ -14,8 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="data.json" />
     <None Remove="Resources\Assets\logo.png" />
     <None Remove="Resources\Sound\completed.wav" />
+    <None Remove="settings.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +34,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Resource Include="Resources\Assets\logo.png" />
+    <EmbeddedResource Include="settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Sound\completed.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
