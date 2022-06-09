@@ -228,6 +228,7 @@ namespace TodoApp.ViewModels
             if (SelectedGroup is null)
             {
                 NotificationService.Instance.ShowError("There's no group selected!");
+                NewTaskName = string.Empty;
                 return;
             }
 

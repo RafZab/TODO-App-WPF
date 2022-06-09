@@ -374,8 +374,9 @@
                             Margin="5,5,5,5"
                             materialDesign:HintAssist.Hint="New task name"
                             Foreground="White"
-                            Text="{Binding NewTaskName}"
-                            TextWrapping="Wrap" KeyDown="TaskNameTextBox_OnKeyDown"
+                            KeyDown="TaskNameTextBox_OnKeyDown"
+                            Text="{Binding NewTaskName, UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="Wrap"
                             VerticalScrollBarVisibility="Auto" />
                         <Button
                             Grid.Column="2"
