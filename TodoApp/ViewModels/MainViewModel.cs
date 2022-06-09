@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Media;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
@@ -26,8 +27,6 @@ namespace TodoApp.ViewModels
         private string _newGroupName;
         private Notifier _notifier;
 
-        private BackgroundWorker _worker;
-
         public DateTime CurrentDate { get; } = DateTime.Today;
 
         public event EventHandler OnRefreshRequest;
@@ -35,8 +34,7 @@ namespace TodoApp.ViewModels
         public MainViewModel()
         {
             TaskGroups = new ExtendedObservableCollection<TaskGroup>();
-            _worker = new BackgroundWorker();
-
+            
             AddGroupCommand = new RelayCommand(AddGroup);
             AddTaskCommand = new RelayCommand(AddTask);
             ToggleTaskCommand = new RelayCommand<ToDoTask>(ToggleTask);
@@ -61,7 +59,7 @@ namespace TodoApp.ViewModels
                     offsetY: 10);
 
                 cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                    notificationLifetime: TimeSpan.FromSeconds(3),
+                    notificationLifetime: TimeSpan.FromSeconds(5),
                     maximumNotificationCount: MaximumNotificationCount.FromCount(5));
 
                 cfg.Dispatcher = Application.Current.Dispatcher;
@@ -69,7 +67,7 @@ namespace TodoApp.ViewModels
 
             DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += TimerTick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
             dispatcherTimer.Start();
         }
 
@@ -93,7 +91,10 @@ namespace TodoApp.ViewModels
 
                 if (reminderDate <= dateNow)
                 {
-                    _notifier.ShowInformation($"Reminding of {task.Name}");
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        _notifier.ShowInformation($"Reminding of {task.Name}");
+                    });
 
                     task.Reminder = null;
                 }
@@ -105,7 +106,7 @@ namespace TodoApp.ViewModels
             var data = DataProvider.Instance.LoadTaskGroups();
             TaskGroups.AddRange(data);
 
-            if (TaskGroups.IsEmpty)
+            if (TaskGroups.Count == 0)
             {
                 InitDefaultData();
             }
@@ -212,6 +213,11 @@ namespace TodoApp.ViewModels
             if (task is null)
             {
                 return;
+            }
+
+            if (!task.IsDone)
+            {
+                SoundPlayerService.Instance.PlayDoneSound();
             }
 
             task.IsDone = !task.IsDone;

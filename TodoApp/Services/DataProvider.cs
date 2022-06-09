@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
 using Newtonsoft.Json;
 using TodoApp.Models;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace TodoApp.Services
 {
