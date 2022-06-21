@@ -73,12 +73,26 @@
                     Content="To Do List"
                     FontSize="30" />
             </StackPanel>
-            <Label
-                Grid.Row="1"
-                Content="Settings"
-                FontSize="15"
-                Foreground="Gray"
-                PreviewMouseLeftButtonUp="Settings_OnPreviewMouseLeftButtonUp" />
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    Content="Settings"
+                    FontSize="15"
+                    Foreground="Gray"
+                    PreviewMouseLeftButtonUp="Settings_OnPreviewMouseLeftButtonUp" />
+                <Button
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    Command="{Binding PrintTasksCommand}"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <materialDesign:PackIcon Kind="Printer" />
+                </Button>
+            </Grid>
+
             <TextBox
                 x:Name="SearchTextBox"
                 Grid.Row="2"

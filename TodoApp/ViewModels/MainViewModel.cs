@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Threading;
 using MaterialDesignThemes.Wpf;
@@ -36,6 +38,7 @@ namespace TodoApp.ViewModels
             DeleteGroupCommand = new RelayCommand<TaskGroup>(DeleteGroup);
             DeleteSubTaskCommand = new RelayCommand<ToDoSubTask>(DeleteSubTask);
             ToggleStarTaskCommand = new RelayCommand(ToggleStarCommand);
+            PrintTasksCommand = new RelayCommand(PrintTasks);
 
             LoadData();
 
@@ -47,6 +50,94 @@ namespace TodoApp.ViewModels
             dispatcherTimer.Tick += TimerTick;
             dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
             dispatcherTimer.Start();
+        }
+
+        private void PrintTasks()
+        {
+            var printDialog = new PrintDialog();
+            bool? print = printDialog.ShowDialog();
+            if (print == false)
+            {
+                return;
+            }
+
+            var document = CreateDocument();
+            document.Name = "Tasks";
+            IDocumentPaginatorSource idpSource = document;
+            printDialog.PrintDocument(idpSource.DocumentPaginator, "Hello WPF Printing.");
+        }
+
+        private FlowDocument CreateDocument()
+        {
+            var doc = new FlowDocument();
+            doc.Blocks.Add(new Paragraph(new Bold(new Run($"Tasks {DateTime.Today.ToShortDateString()}")) { FontSize = 18}));
+
+            foreach (var taskGroup in TaskGroups)
+            {
+                var headerParagraph = new Paragraph(new Bold(new Run(taskGroup.Name)))
+                {
+                    FontSize = 14,
+                    Margin = new Thickness(0, 40, 0, 0)
+                };
+                doc.Blocks.Add(headerParagraph);
+
+                if (taskGroup.Tasks.Count == 0)
+                {
+                    doc.Blocks.Add(new Paragraph(new Italic(new Run("No tasks in group") { FontSize = 10 })));
+                }
+
+                var list = new List();
+                foreach (var task in taskGroup.Tasks)
+                {
+                    var listItemTask = new ListItem(CreateTaskParagraph(task));
+
+                    var subTaskList = new List();
+                    foreach (var subTask in task.SubTasks)
+                    {
+                        subTaskList.ListItems.Add(new ListItem(CreateSubTaskParagraph(subTask)));
+                    }
+                    listItemTask.Blocks.Add(subTaskList);
+                    list.ListItems.Add(listItemTask);
+                }
+                
+                doc.Blocks.Add(list);
+            }
+
+            return doc;
+        }
+
+        private Paragraph CreateTaskParagraph(ToDoTask task)
+        {
+            if (task is null)
+            {
+                return new Paragraph();
+            }
+
+            var paragraph = new Paragraph(new Run(task.Name));
+
+            if (task.IsDone)
+            {
+                paragraph.TextDecorations = TextDecorations.Strikethrough;
+            }
+
+            return paragraph;
+        }
+
+        private Paragraph CreateSubTaskParagraph(ToDoSubTask subTask)
+        {
+            if (subTask is null)
+            {
+                return new Paragraph();
+            }
+
+            var paragraph = new Paragraph(new Run(subTask.Name));
+
+            if (subTask.IsDone)
+            {
+                paragraph.TextDecorations = TextDecorations.Strikethrough;
+            }
+
+            return paragraph;
         }
 
         private void EditGroup(TaskGroup group)
@@ -331,6 +422,8 @@ namespace TodoApp.ViewModels
         public IRelayCommand<ToDoSubTask> DeleteSubTaskCommand { get; }
 
         public IRelayCommand ToggleStarTaskCommand { get; }
+
+        public IRelayCommand PrintTasksCommand { get; }
 
         protected virtual void OnOnRefreshRequest()
         {
